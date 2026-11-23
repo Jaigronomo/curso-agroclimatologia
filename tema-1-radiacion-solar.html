@@ -1,0 +1,1464 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Tema 1 · Radiación solar y nubosidad</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --s1: #2a78d6;
+  --s2: #eb6834;
+  --link: #256abf;
+  --border: rgba(11, 11, 11, 0.10);
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --ink: #f0efec;
+    --ink2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --s1: #3987e5;
+    --s2: #d95926;
+    --link: #6da7ec;
+    --border: rgba(255, 255, 255, 0.10);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --ink: #f0efec;
+  --ink2: #c3c2b7;
+  --muted: #898781;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --s1: #3987e5;
+  --s2: #d95926;
+  --link: #6da7ec;
+  --border: rgba(255, 255, 255, 0.10);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.6;
+  font-size: 17px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+a { color: var(--link); }
+
+header.hero { padding: 40px 0 8px; }
+.kicker { color: var(--ink2); font-size: 14px; letter-spacing: .02em; margin: 0 0 6px; }
+h1 { font-size: clamp(1.9rem, 4.5vw, 2.7rem); line-height: 1.15; margin: 0 0 14px; font-weight: 650; }
+.lead { font-size: 1.12rem; color: var(--ink2); max-width: 46em; margin: 0 0 14px; }
+
+h2 { font-size: 1.5rem; line-height: 1.25; margin: 44px 0 12px; font-weight: 650; }
+h3 { font-size: 1.1rem; margin: 0 0 2px; font-weight: 650; }
+p { margin: 0 0 12px; max-width: 46em; }
+ul, ol { padding-left: 1.3em; max-width: 46em; }
+li { margin-bottom: 8px; }
+ul ul { margin-top: 8px; }
+sub, sup { line-height: 0; }
+
+.eq {
+  font-family: "Cambria Math", "STIX Two Math", Georgia, serif;
+  font-size: 1.25rem;
+  text-align: center;
+  padding: 14px 10px;
+  margin: 14px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+.eq-small { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; font-size: 1.05rem; }
+dl.vars { max-width: 46em; margin: 0 0 12px; }
+dl.vars dt { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; font-weight: 600; margin-top: 10px; }
+dl.vars dd { margin: 0; color: var(--ink2); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+.note {
+  font-size: .92rem;
+  color: var(--ink2);
+  border-left: 3px solid var(--axis);
+  padding: 2px 0 2px 12px;
+  margin: 14px 0;
+  max-width: 46em;
+}
+
+/* Laboratorio */
+.top { display: grid; gap: 16px; grid-template-columns: 1fr; margin-bottom: 16px; }
+@media (min-width: 900px) { .top { grid-template-columns: 1fr 290px; } }
+.controls { display: grid; gap: 14px 22px; grid-template-columns: 1fr; align-content: start; }
+@media (min-width: 600px) { .controls { grid-template-columns: 1fr 1fr; } }
+.ctl label { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: .95rem; font-weight: 600; }
+.ctl output { font-weight: 500; color: var(--ink2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ctl input[type=range] { width: 100%; accent-color: var(--s1); margin: 6px 0 2px; }
+.ctl select {
+  width: 100%; margin-top: 6px; font: inherit; font-size: .95rem;
+  padding: 7px 10px; border-radius: 8px; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--axis);
+}
+.ctl .hint { font-size: .8rem; color: var(--ink2); margin: 0; line-height: 1.4; }
+.ctl.info { font-size: .82rem; color: var(--ink2); line-height: 1.45; align-self: end; }
+.ctl.info p { margin: 0; }
+.ctl select:focus-visible, input[type=range]:focus-visible, summary:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+
+.mapcard h3 { margin-bottom: 4px; }
+.mapcard svg { width: 100%; max-width: 270px; height: auto; display: block; margin: 4px auto 0; }
+.mapcard .cap { font-size: .84rem; color: var(--ink2); margin: 8px 0 0; line-height: 1.5; }
+.mapcard .cap div { display: flex; align-items: baseline; gap: 6px; }
+
+.bd {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%; flex: none;
+  background: var(--ink); color: var(--surface); font-size: 11px; font-weight: 700; line-height: 1;
+}
+
+.tiles { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin-bottom: 16px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+.tile .l { font-size: .82rem; color: var(--ink2); margin: 0 0 2px; }
+.tile .row { display: flex; align-items: center; gap: 8px; }
+.tile .v { font-size: 1.45rem; font-weight: 650; line-height: 1.3; margin: 0; }
+.tile .v small { font-size: .74rem; font-weight: 500; color: var(--ink2); }
+.tile .s { font-size: .78rem; color: var(--ink2); margin: 0 0 6px; line-height: 1.35; }
+.tiles:not(.cmp) .bd, .tiles:not(.cmp) .cb { display: none; }
+.tiles:not(.cmp) .row .bd { display: none; }
+
+.scenecard { margin-bottom: 16px; }
+.scenecard .sub { font-size: .9rem; color: var(--ink2); margin: 0 0 10px; max-width: none; }
+#sceneBox svg { width: 100%; height: auto; display: block; max-width: 800px; margin: 0 auto; border-radius: 14px; }
+#sceneBox .sc {
+  font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #f1f5f9;
+  paint-order: stroke; stroke: #0b1226; stroke-width: 3px; stroke-linejoin: round;
+}
+#sceneBox .sc2 { font-weight: 500; fill: #cbd5e1; }
+@keyframes flow { to { stroke-dashoffset: -28; } }
+#sceneBox .ray { stroke-dasharray: 6 8; animation: flow 1.6s linear infinite; }
+@media (prefers-reduced-motion: reduce) { #sceneBox .ray { animation: none; } }
+#lanternText { font-size: .92rem; color: var(--ink2); margin: 10px auto 0; max-width: 800px; }
+
+.chartcard { margin-bottom: 16px; position: relative; min-width: 0; }
+.duo { display: grid; gap: 16px; grid-template-columns: 1fr; margin-bottom: 16px; }
+.duo .chartcard { margin-bottom: 0; }
+@media (min-width: 900px) { .duo { grid-template-columns: 1fr 1fr; } }
+.chart { overflow: hidden; }
+#importancia h3 { margin: 28px 0 6px; }
+#importancia .note ol { margin: 6px 0 0; }
+.chartcard .sub { font-size: .9rem; color: var(--ink2); margin: 0 0 8px; max-width: none; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: .88rem; margin: 6px 0 4px; }
+.legend > span { display: inline-flex; align-items: center; gap: 7px; }
+.lk { display: inline-block; width: 18px; height: 3px; border-radius: 2px; flex: none; }
+.lk.ck { background: var(--ink); }
+.lk.ck.dash { background: repeating-linear-gradient(90deg, var(--ink) 0 5px, transparent 5px 8px); }
+.chart { position: relative; touch-action: pan-y; cursor: crosshair; user-select: none; }
+.chart svg { display: block; }
+.ax { font: 11.5px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink2); }
+.ax-m { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--muted); }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.gl { stroke: var(--grid); stroke-width: 1; }
+.base { stroke: var(--axis); stroke-width: 1; }
+.tip {
+  position: absolute; pointer-events: none; z-index: 3;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--axis); border-radius: 8px;
+  padding: 8px 10px; font-size: .85rem; line-height: 1.4; white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0,0,0,.12);
+}
+.tip .h { color: var(--ink2); margin-bottom: 4px; }
+.tip .r { display: flex; align-items: center; gap: 8px; }
+.tip .r b { font-size: 1rem; font-variant-numeric: tabular-nums; min-width: 3.2em; text-align: right; }
+.tip .r span { color: var(--ink2); }
+.tip .lk { width: 12px; }
+
+details.tv { margin-top: 10px; font-size: .9rem; }
+details.tv summary { cursor: pointer; color: var(--link); }
+.tscroll { overflow-x: auto; margin-top: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+th, td { text-align: right; padding: 5px 10px; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--ink2); font-weight: 600; }
+
+details.eqs { margin: 8px 0 0; }
+details.eqs summary { cursor: pointer; font-weight: 600; }
+details.eqs ol { margin-top: 10px; }
+details.eqs li { margin-bottom: 10px; }
+.ref { font-size: .86rem; color: var(--ink2); }
+
+footer { margin: 56px 0 40px; font-size: .85rem; color: var(--ink2); border-top: 1px solid var(--border); padding-top: 16px; }
+footer p { max-width: 52em; }
+
+:root { --ok: #006300; --bad: #b3261e; }
+@media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) { --ok: #0ca30c; --bad: #ec835a; } }
+:root[data-theme="dark"] { --ok: #0ca30c; --bad: #ec835a; }
+
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.themebtn { font: inherit; font-size: .82rem; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--axis); background: transparent; color: var(--ink); cursor: pointer; }
+.themebtn:hover, .btn.ghost:hover, .presets button:hover { background: var(--grid); }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 4px; }
+.presets button { font: inherit; font-size: .78rem; padding: 3px 10px; border-radius: 999px; cursor: pointer; color: var(--ink); background: transparent; border: 1px solid var(--axis); }
+.presets button[aria-pressed="true"] { border-color: var(--s1); box-shadow: inset 0 0 0 1px var(--s1); }
+#nnOut { white-space: normal; text-align: right; }
+.btn { font: inherit; font-size: .9rem; padding: 7px 14px; border-radius: 8px; cursor: pointer; color: var(--surface); background: var(--ink); border: 1px solid var(--ink); }
+.btn:hover { opacity: .88; }
+.btn.ghost { color: var(--ink); background: transparent; border: 1px solid var(--axis); }
+.btn:focus-visible, .themebtn:focus-visible, .presets button:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+.alert { border-left: 4px solid var(--s2); background: var(--surface); border-radius: 0 10px 10px 0; padding: 10px 14px; margin: 14px 0; max-width: 46em; }
+.steps { padding-left: 1.4em; max-width: 52em; }
+.steps li { margin-bottom: 12px; }
+.res { font-weight: 650; }
+.ex { margin: 14px 0; }
+.ex h3 { margin-bottom: 6px; }
+details.sol { margin-top: 10px; }
+details.sol summary { cursor: pointer; color: var(--link); font-weight: 600; }
+details.sol > div { margin-top: 8px; }
+.chk { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 10px 0 4px; }
+.chk input[type=number] { font: inherit; width: 9em; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--axis); background: var(--surface); color: var(--ink); }
+.fb { margin: 6px 0 0; min-height: 1.4em; font-weight: 600; }
+.fb.ok { color: var(--ok); }
+.fb.bad { color: var(--bad); }
+.tip .p { white-space: normal; width: 230px; margin-top: 6px; color: var(--ink2); font-size: .8rem; }
+#controls { scroll-margin-top: 12px; }
+#taller h3 { margin-top: 26px; }
+#taller .ex h3 { margin-top: 0; }
+
+/* ===== Rediseño visual ===== */
+html { scroll-padding-top: 76px; }
+@media (max-width: 640px) { html { scroll-padding-top: 108px; } }
+
+/* Barra de navegación fija y translúcida */
+.topnav {
+  position: sticky; top: 0; z-index: 30;
+  background: rgba(249, 249, 247, 0.85);
+  -webkit-backdrop-filter: saturate(160%) blur(12px); backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+@supports (background: color-mix(in srgb, red, blue)) {
+  .topnav { background: color-mix(in srgb, var(--page) 82%, transparent); }
+}
+.topnav-in { max-width: 1040px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 8px 18px; flex-wrap: wrap; }
+.topnav .brand { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 1rem; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.topnav .links { display: flex; gap: 2px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.topnav .links::-webkit-scrollbar { display: none; }
+.topnav .links a { font-size: .88rem; color: var(--ink2); text-decoration: none; padding: 5px 11px; border-radius: 999px; white-space: nowrap; }
+.topnav .links a:hover { background: var(--grid); color: var(--ink); }
+.topnav .links a[aria-current="true"] { background: var(--ink); color: var(--surface); }
+.topnav .links a:focus-visible, .topnav .brand:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+@media (max-width: 640px) {
+  .topnav .brand { order: 1; flex: 1; }
+  .topnav .themebtn { order: 2; }
+  .topnav .links { order: 3; flex: 0 0 100%; }
+}
+
+/* Hero editorial */
+header.hero { padding: 56px 0 12px; }
+.kicker {
+  display: inline-block; margin: 0 0 16px; padding: 5px 14px; border-radius: 999px;
+  background: var(--grid); color: var(--ink2);
+  font-size: .8rem; font-weight: 650; letter-spacing: .04em;
+}
+@supports (background: color-mix(in srgb, red, blue)) {
+  .kicker { background: color-mix(in srgb, var(--s1) 13%, transparent); color: var(--link); }
+}
+h1, h2 { font-family: Georgia, 'Times New Roman', serif; }
+h1 { font-size: clamp(2.1rem, 5.2vw, 3.2rem); letter-spacing: -0.01em; font-weight: 700; max-width: 16em; }
+h2 { font-weight: 700; letter-spacing: -0.005em; }
+.lead { font-size: 1.18rem; max-width: 40em; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 0; max-width: none; }
+.btn-primary, .btn-ghost { display: inline-block; font-size: .98rem; font-weight: 600; padding: 11px 22px; border-radius: 999px; text-decoration: none; }
+.btn-primary { background: var(--ink); color: var(--surface); border: 1px solid var(--ink); }
+.btn-primary:hover { opacity: .88; }
+.btn-ghost { color: var(--ink); border: 1px solid var(--axis); }
+.btn-ghost:hover { background: var(--grid); }
+.btn-primary:focus-visible, .btn-ghost:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+
+/* Jerarquía en las tarjetas de datos */
+.tiles { gap: 14px; }
+.tile { padding: 16px 18px; border-left: 4px solid var(--border); }
+.tile:has(#t_ra_a) { border-left-color: var(--s1); }
+.tile:has(#t_rs_a) { border-left-color: var(--s2); }
+.tile:has(#t_par_a) { border-left-color: #2f855a; }
+@supports not selector(:has(*)) {
+  .tile:nth-child(7) { border-left-color: var(--s1); }
+  .tile:nth-child(8) { border-left-color: var(--s2); }
+  .tile:nth-child(10) { border-left-color: #2f855a; }
+}
+.tile .l { margin-bottom: 4px; }
+.tile .s { margin-top: 4px; }
+
+/* Cuadrícula conceptual en agronomía */
+.concept-grid { display: grid; gap: 16px; grid-template-columns: 1fr; margin: 18px 0 8px; }
+@media (min-width: 820px) { .concept-grid { grid-template-columns: 1fr 1fr; } }
+.concept-card {
+  position: relative; overflow: hidden; min-width: 0;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 24px 24px 12px;
+}
+.concept-card .concept-num {
+  position: absolute; top: 8px; right: 18px; pointer-events: none; user-select: none;
+  font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 3.6rem; line-height: 1;
+  color: var(--ink); opacity: .07;
+}
+.concept-card h3 { margin: 0 3.2rem 10px 0; font-family: Georgia, 'Times New Roman', serif; font-size: 1.15rem; }
+.concept-card p, .concept-card ul, .concept-card ol, .concept-card dl.vars { max-width: none; }
+.concept-card .eq { font-size: 1.02rem; }
+#importancia > .note { margin-top: 20px; }
+
+/* Taller: retos y soluciones */
+.reto { border: 1px solid var(--border); border-left: 4px solid var(--s1); }
+@supports (background: color-mix(in srgb, red, blue)) {
+  .reto { border-color: color-mix(in srgb, var(--s1) 32%, transparent); border-left-color: var(--s1); }
+}
+.reto::before {
+  content: "RETO DE CÁLCULO"; display: block; margin-bottom: 8px;
+  font-size: .72rem; font-weight: 700; letter-spacing: .1em; color: var(--link);
+}
+details.sol > div { background: var(--page); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; }
+@supports (background: color-mix(in srgb, red, blue)) {
+  details.sol > div { background: color-mix(in srgb, var(--s1) 6%, var(--surface)); }
+}
+details.sol[open] > summary { margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Navegación del tema">
+  <div class="topnav-in">
+    <a class="brand" href="#">Tema 1 · Radiación solar</a>
+    <div class="links">
+      <a href="index.html">← Inicio del curso</a>
+      <a href="#geometria">Geometría</a>
+      <a href="#atmosfera">Atmósfera</a>
+      <a href="#lab">Laboratorio</a>
+      <a href="#importancia">Agronomía</a>
+      <a href="#taller">Taller</a>
+    </div>
+    <button type="button" class="themebtn" id="themeBtn"></button>
+  </div>
+</nav>
+<div class="wrap">
+
+<header class="hero">
+  <div class="topbar">
+    <p class="kicker">Agroclimatología · Módulo 1 · Tema 1</p>
+  </div>
+  <h1>Radiación solar y nubosidad</h1>
+  <p class="lead">Cuánta energía del Sol recibe un cultivo depende de dónde está (la latitud), de la época del año y de cuántas nubes hay. En este tema vas a entender cómo se calcula y a moverla tú mismo en el laboratorio interactivo.</p>
+  <p class="cta"><a class="btn-primary" href="#lab">Ir al laboratorio ↓</a> <a class="btn-ghost" href="#taller">Ver el taller</a></p>
+</header>
+
+<main>
+
+<section id="geometria">
+  <h2>1. La geometría: ángulo de incidencia y latitud</h2>
+  <p>El Sol emite una cantidad casi constante de energía hacia el espacio, llamada <strong>constante solar</strong> (<i>G</i><sub>sc</sub> ≈ 1361 W/m²). Sin embargo, la Tierra es una esfera con el eje inclinado 23.45°, por lo que los rayos no caen igual en todas partes.</p>
+  <ul>
+    <li><strong>El efecto linterna (ley del coseno).</strong> Si apuntas una linterna directo al suelo (90°), toda la luz se concentra en un círculo pequeño e intenso. Si inclinas la linterna, la misma cantidad de luz se reparte en un óvalo mucho más grande y entrega menos energía por metro cuadrado.</li>
+    <li><strong>Latitud (φ) y declinación solar (δ).</strong> La declinación es la latitud donde los rayos del Sol caen perpendiculares al mediodía. Varía entre +23.45° en junio y −23.45° en diciembre.
+      <ul>
+        <li>En latitudes altas (como Europa o Norteamérica), en invierno los rayos llegan muy inclinados y los días son cortos. Eso genera una estacionalidad térmica fuerte.</li>
+        <li><strong>El caso de Colombia</strong> (latitud ≈ 0° a 12° N). Como estamos cerca del ecuador, el Sol pasa casi perpendicular sobre nosotros todo el año. Hay dos máximos suaves cerca de los equinoccios (marzo y septiembre) y descensos leves hacia los solsticios. Por eso en Colombia no hay estaciones térmicas de verano e invierno: la energía en el tope de la atmósfera (<i>R</i><sub>a</sub>) es alta y bastante pareja los 12 meses.</li>
+      </ul>
+    </li>
+  </ul>
+</section>
+
+<section id="atmosfera">
+  <h2>2. La atmósfera como filtro: de R<sub>a</sub> a R<sub>s</sub></h2>
+  <p>La radiación que llega al borde superior de la atmósfera se llama <strong>radiación extraterrestre</strong> (<i>R</i><sub>a</sub>) y se calcula con pura astronomía, solo con la fecha y la latitud. Pero esa energía no llega intacta al suelo. Al atravesar la atmósfera, las nubes, el vapor de agua y los aerosoles reflejan o absorben una parte.</p>
+  <p>Lo que finalmente toca el dosel del cultivo se llama <strong>radiación solar global</strong> (<i>R</i><sub>s</sub>). Cuando no hay sensores directos (piranómetros), en agronomía se estima con la ecuación de Ångström-Prescott:</p>
+  <div class="eq"><i>R</i><sub>s</sub> = ( <i>a</i><sub>s</sub> + <i>b</i><sub>s</sub> · <i>n</i>/<i>N</i> ) · <i>R</i><sub>a</sub></div>
+  <dl class="vars">
+    <dt>R<sub>a</sub></dt>
+    <dd>Radiación extraterrestre: el techo máximo teórico del día, en MJ m<sup>−2</sup> día<sup>−1</sup>.</dd>
+    <dt>N</dt>
+    <dd>Duración astronómica máxima del día, en horas. En el trópico son unas 12 horas todo el año.</dd>
+    <dt>n</dt>
+    <dd>Horas reales de brillo solar fuerte medidas en campo con un heliógrafo (la esfera de cristal que quema una cartulina).</dd>
+    <dt>a<sub>s</sub> y b<sub>s</sub></dt>
+    <dd>Coeficientes empíricos. La FAO recomienda <i>a</i><sub>s</sub> = 0.25 y <i>b</i><sub>s</sub> = 0.50 cuando no hay calibración local. Esto significa que incluso un día 100 % nublado (<i>n</i> = 0) llega cerca del 25 % de <i>R</i><sub>a</sub> en forma de luz difusa.</dd>
+  </dl>
+</section>
+
+<section id="lab">
+  <h2>Laboratorio: mueve las variables</h2>
+  <p>Elige una ciudad (o mueve la latitud a mano) y, si quieres, compárala con otra. Cambia el día del año y la nubosidad: la escena, los datos y los gráficos se actualizan juntos. Los controles están justo debajo de la escena del planeta. También puedes hacer clic o arrastrar sobre el gráfico anual para elegir el día.</p>
+
+  <div class="card scenecard">
+    <h3>Efecto linterna: el Sol, la Tierra y el suelo del cultivo</h3>
+    <p class="sub">Vista de lado de la Tierra al mediodía solar de la ciudad A. El Sol está a la izquierda y sus rayos llegan paralelos. El recuadro amplía el suelo para ver cómo se reparte la luz.</p>
+    <div id="sceneBox"></div>
+    <p id="lanternText"></p>
+  </div>
+
+  <div class="top">
+    <div class="controls card" id="controls">
+      <div class="ctl">
+        <label for="citySel"><span>Ciudad A</span></label>
+        <select id="citySel"></select>
+      </div>
+      <div class="ctl">
+        <label for="cityB"><span>Comparar con (ciudad B)</span></label>
+        <select id="cityB"></select>
+      </div>
+      <div class="ctl">
+        <label for="lat"><span>Latitud de A (φ)</span> <output id="latOut" for="lat"></output></label>
+        <input type="range" id="lat" min="-60" max="60" step="0.01" value="4.71">
+        <p class="hint">Se ajusta sola al elegir una ciudad. Muévela para probar cualquier latitud.</p>
+      </div>
+      <div class="ctl">
+        <label for="alt"><span>Altitud de A (<i>z</i>)</span> <output id="altOut" for="alt"></output></label>
+        <input type="range" id="alt" min="0" max="3500" step="10" value="2600">
+        <p class="hint">Metros sobre el nivel del mar, aproximados. Se usa para <i>R</i><sub>so</sub> (cielo despejado).</p>
+      </div>
+      <div class="ctl">
+        <label for="day"><span>Día del año (<i>J</i>)</span> <output id="dayOut" for="day"></output></label>
+        <input type="range" id="day" min="1" max="365" step="1" value="105">
+        <p class="hint">1 = 1 de enero, 365 = 31 de diciembre</p>
+      </div>
+      <div class="ctl">
+        <label for="nn"><span>Brillo solar (<i>n</i>/<i>N</i>)</span> <output id="nnOut" for="nn"></output></label>
+        <input type="range" id="nn" min="0" max="1" step="0.05" value="0.5">
+        <p class="hint">0 = totalmente nublado, 1 = despejado</p>
+        <div class="presets" id="presets">
+          <button type="button" data-nn="0.25">Lluvioso (tipo La Niña) · 0.25</button>
+          <button type="button" data-nn="0.5">Intermedio · 0.50</button>
+          <button type="button" data-nn="0.78">Seco (tipo El Niño) · 0.78</button>
+        </div>
+        <p class="hint">Valores ilustrativos, no promedios oficiales. Para datos reales de una zona usa las estaciones del IDEAM.</p>
+      </div>
+      <div class="ctl info">
+        <p><strong>¿De dónde salen los datos?</strong> No son mediciones de un año en particular. <i>R</i><sub>a</sub> se calcula con astronomía y es casi idéntica todos los años. <i>R</i><sub>s</sub> se estima con el <i>n</i>/<i>N</i> que elijas. Las mediciones reales vendrán después, en el módulo de la estación meteorológica.</p>
+      </div>
+    </div>
+
+    <div class="card mapcard">
+      <h3>Ubicación en Colombia</h3>
+      <div id="mapBox"></div>
+      <div class="cap" id="mapCap"></div>
+    </div>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="duo">
+  <div class="card chartcard">
+    <h3>Todo el año: energía diaria</h3>
+    <p class="sub" id="annualSub"></p>
+    <div class="legend" id="annualLegend"></div>
+    <div class="chart" id="annualChart"></div>
+    <div class="tip" id="annualTip" hidden></div>
+    <details class="tv">
+      <summary>Ver como tabla (día 15 de cada mes)</summary>
+      <div class="tscroll"><table id="annualTable"></table></div>
+    </details>
+  </div>
+
+  <div class="card chartcard">
+    <h3>El día elegido, hora por hora</h3>
+    <p class="sub" id="hourlySub"></p>
+    <div class="legend" id="hourlyLegend"></div>
+    <div class="chart" id="hourlyChart"></div>
+    <div class="tip" id="hourlyTip" hidden></div>
+    <p class="note"><strong>Nota:</strong> la curva de <i>R</i><sub>s</sub> horaria es una aproximación bajo nubosidad homogénea: se aplica el factor diario (<i>a</i><sub>s</sub> + <i>b</i><sub>s</sub> <i>n</i>/<i>N</i>) a la curva horaria de <i>R</i><sub>a</sub>. En campo, el paso de las nubes produce fluctuaciones instantáneas que solo captura un piranómetro en tiempo real. Por eso un heliógrafo mide acumulados diarios, mientras que una estación automática mide flujos instantáneos.</p>
+    <p class="note"><strong>Hora solar y hora oficial.</strong> El reloj de Colombia marca UTC−5, que corresponde al meridiano 75° O. El mediodía solar de una ciudad coincide con las 12:00 del reloj solo si está en esa longitud. Bogotá (74.07° O) lo tiene unos 4 minutos antes y Cali (76.53° O) unos 6 minutos después, y la ecuación del tiempo suma una variación de hasta unos ±15 minutos a lo largo del año. Una hora de salida o puesta del Sol que parte la hora en dos aparece marcada como "hora parcial" al pasar el cursor.</p>
+    <details class="tv">
+      <summary>Ver como tabla</summary>
+      <div class="tscroll"><table id="hourlyTable"></table></div>
+    </details>
+  </div>
+
+  </div>
+
+  <details class="eqs card">
+    <summary>Ecuaciones que usa el laboratorio (FAO-56)</summary>
+    <ol class="eq-small">
+      <li>Declinación solar: <i>δ</i> = 0.409 sen(2π<i>J</i>/365 − 1.39) &nbsp;<span class="ref">(ec. 24)</span></li>
+      <li>Distancia relativa Tierra-Sol: <i>d</i><sub>r</sub> = 1 + 0.033 cos(2π<i>J</i>/365) &nbsp;<span class="ref">(ec. 23)</span></li>
+      <li>Ángulo horario de la puesta del Sol: <i>ω</i><sub>s</sub> = arccos(−tan <i>φ</i> · tan <i>δ</i>) &nbsp;<span class="ref">(ec. 25)</span></li>
+      <li>Duración máxima del día: <i>N</i> = (24/π) <i>ω</i><sub>s</sub> &nbsp;<span class="ref">(ec. 34)</span></li>
+      <li>Radiación extraterrestre diaria: <i>R</i><sub>a</sub> = (24·60/π) <i>G</i><sub>sc</sub> <i>d</i><sub>r</sub> [ <i>ω</i><sub>s</sub> sen <i>φ</i> sen <i>δ</i> + cos <i>φ</i> cos <i>δ</i> sen <i>ω</i><sub>s</sub> ] &nbsp;<span class="ref">(ec. 21)</span></li>
+      <li>Radiación extraterrestre horaria: <i>R</i><sub>a</sub> = (12·60/π) <i>G</i><sub>sc</sub> <i>d</i><sub>r</sub> [ (<i>ω</i><sub>2</sub> − <i>ω</i><sub>1</sub>) sen <i>φ</i> sen <i>δ</i> + cos <i>φ</i> cos <i>δ</i> (sen <i>ω</i><sub>2</sub> − sen <i>ω</i><sub>1</sub>) ] &nbsp;<span class="ref">(ec. 28)</span></li>
+      <li>Ångström-Prescott: <i>R</i><sub>s</sub> = (<i>a</i><sub>s</sub> + <i>b</i><sub>s</sub> <i>n</i>/<i>N</i>) <i>R</i><sub>a</sub> &nbsp;<span class="ref">(ec. 35)</span></li>
+      <li>Irradiancia al mediodía solar en el tope de la atmósfera: <i>G</i><sub>0</sub> = <i>G</i><sub>sc</sub> <i>d</i><sub>r</sub> cos <i>θ</i><sub>z</sub>, con <i>θ</i><sub>z</sub> = |<i>φ</i> − <i>δ</i>|</li>
+      <li>Radiación de cielo despejado: <i>R</i><sub>so</sub> = (0.75 + 2×10<sup>−5</sup> <i>z</i>) <i>R</i><sub>a</sub>, con <i>z</i> en metros &nbsp;<span class="ref">(ec. 37)</span></li>
+      <li>Equivalente en agua: lámina (mm día<sup>−1</sup>) = 0.408 × <i>R</i> (MJ m<sup>−2</sup> día<sup>−1</sup>), con <i>λ</i> = 2.45 MJ kg<sup>−1</sup></li>
+    </ol>
+    <p>Aquí <i>J</i> es el día del año, <i>φ</i> la latitud en radianes (positiva al norte) y <i>ω</i> el ángulo horario (0 al mediodía solar, 15° por cada hora). Para <i>G</i><sub>sc</sub> se usa el valor de la FAO, 0.0820 MJ m<sup>−2</sup> min<sup>−1</sup> (≈ 1367 W/m²), para que los resultados coincidan con las tablas y ejemplos del manual. El valor moderno medido por satélite es 1361 W/m², una diferencia de 0.4 %.</p>
+    <p><strong>¿Por qué <i>R</i><sub>so</sub> crece con la altitud?</strong> A mayor altura hay menos atmósfera sobre el cultivo, así que en un día despejado llega una proporción mayor de <i>R</i><sub>a</sub>: 0.75 al nivel del mar y cerca de 0.80 a 2600 m (Bogotá). La razón <i>R</i><sub>s</sub>/<i>R</i><sub>so</sub> de las tarjetas indica qué tan cerca está el día de ser despejado (1 = cielo despejado). Las altitudes de las ciudades son aproximadas.</p>
+    <p>El laboratorio trabaja en <strong>hora solar</strong> (el mediodía es cuando el Sol está en su punto más alto), sin la corrección por huso horario ni por la ecuación del tiempo. Para convertir: 1 MJ m<sup>−2</sup> h<sup>−1</sup> = 277.8 W m<sup>−2</sup>. Las coordenadas de las ciudades son aproximadas (centro urbano) y solo la latitud entra en los cálculos.</p>
+  </details>
+</section>
+
+<section id="importancia">
+  <h2>3. ¿Por qué esto importa en agronomía?</h2>
+  <p>La radiación solar es la energía que mueve casi todo lo que ocurre en un cultivo. Estas son seis razones para entenderla bien.</p>
+
+    <div class="concept-grid">
+    <article class="concept-card">
+      <span class="concept-num" aria-hidden="true">01</span>
+      <h3>Es el motor de la fotosíntesis</h3>
+  <p>De toda la radiación solar (<i>R</i><sub>s</sub>) que llega, aproximadamente el 45 % al 50 % es radiación fotosintéticamente activa (PAR): el rango de luz visible (400 a 700 nm) que las plantas usan para fijar carbono. Sin radiación no hay biomasa.</p>
+  <p>Una forma clásica de verlo (Monteith, 1977) es que la biomasa producida es proporcional a la radiación que el cultivo intercepta:</p>
+  <div class="eq">Biomasa = ε × PAR<sub>interceptada</sub> &nbsp;&nbsp;con&nbsp;&nbsp; PAR<sub>interceptada</sub> = PAR × (1 − e<sup>−<i>k</i>·IAF</sup>)</div>
+  <dl class="vars">
+    <dt>ε</dt>
+    <dd>Eficiencia de uso de la radiación: gramos de materia seca por cada MJ de PAR interceptada. Cambia con la especie (en general, las plantas C4 como el maíz y la caña son más eficientes que las C3) y baja con el estrés hídrico o nutricional.</dd>
+    <dt>IAF</dt>
+    <dd>Índice de área foliar: m² de hoja por m² de suelo.</dd>
+    <dt>k</dt>
+    <dd>Coeficiente de extinción de la luz en el dosel. Valores típicos entre 0.4 y 0.7, según la arquitectura de las hojas.</dd>
+  </dl>
+  <p>Con IAF = 3 y <i>k</i> = 0.5, el cultivo intercepta cerca del 78 % de la PAR. Dos cultivos con la misma radiación pueden producir distinto porque interceptan una fracción diferente o porque la aprovechan con otra eficiencia.</p>
+    </article>
+    <article class="concept-card">
+      <span class="concept-num" aria-hidden="true">02</span>
+      <h3>Explica la paradoja del trópico</h3>
+  <p>En el laboratorio, elige Bogotá (4.7° N) y compárala con Madrid (España). Recorre el año con el día: la curva de <i>R</i><sub>a</sub> de Bogotá casi no se inmuta, mientras que la de Madrid cambia mucho. Ahora mueve el brillo solar (<i>n</i>/<i>N</i>): la curva de <i>R</i><sub>s</sub> cae mucho en ambas.</p>
+  <p>Una de las causas de que baje el rendimiento en épocas de lluvia intensa (por ejemplo en el llenado de grano o en la producción de flores) es el déficit de luz por la cobertura de nubes: el techo astronómico no cambió, lo que cambió es cuánta energía llega al cultivo. Otros factores, como las enfermedades, también influyen.</p>
+    </article>
+    <article class="concept-card">
+      <span class="concept-num" aria-hidden="true">03</span>
+      <h3>Define si el fotoperiodo importa o no</h3>
+  <p>La duración del día (<i>N</i>) controla la floración de muchas especies. Hay plantas de día corto (como la soya y el crisantemo), de día largo (como el trigo y la cebada) y neutras. Con la fórmula del laboratorio, en Bogotá <i>N</i> varía solo entre unas 11.7 y 12.3 horas a lo largo del año, mientras que en Madrid (España) va de unas 9 a unas 15 horas.</p>
+  <p>Por eso, cerca del ecuador el fotoperiodo natural casi no cambia con la época, y la temperatura (que depende de la altitud) suele pesar más en la duración del ciclo. Quien cultiva crisantemo para flor de corte en la Sabana tiene que manejar el fotoperiodo con luz artificial o cortinas de oscuridad, porque el día natural no se lo ofrece.</p>
+    </article>
+    <article class="concept-card">
+      <span class="concept-num" aria-hidden="true">04</span>
+      <h3>Alimenta el balance de energía y el agua del cultivo</h3>
+  <p>La radiación que llega al cultivo se reparte entre calentar el aire y el suelo y evaporar agua. Por eso <i>R</i><sub>s</sub> es la base para estimar cuánta agua necesita un cultivo (lo veremos en el Tema 7, con la ecuación FAO Penman-Monteith).</p>
+  <p>Para pasar de energía a agua se usa que 1 MJ m<sup>−2</sup> día<sup>−1</sup> equivale a 0.408 mm/día de agua evaporada (calor latente de vaporización ≈ 2.45 MJ/kg). Si <i>R</i><sub>s</sub> = 18.7 MJ m<sup>−2</sup> día<sup>−1</sup> (Bogotá, 15 de abril, con <i>n</i>/<i>N</i> = 0.5), esa energía equivale a unos 7.6 mm/día. La evapotranspiración real es menor, porque parte de la energía se refleja o se pierde como radiación de onda larga.</p>
+    </article>
+    <article class="concept-card">
+      <span class="concept-num" aria-hidden="true">05</span>
+      <h3>Orienta el manejo: siembra, sombra y estructuras</h3>
+  <ul>
+    <li><strong>Épocas de siembra.</strong> Conviene que las etapas críticas (floración, llenado de grano) coincidan con épocas de buena radiación disponible.</li>
+    <li><strong>Densidad y arreglo.</strong> Más plantas interceptan más luz, hasta el punto en que se sombrean entre ellas.</li>
+    <li><strong>Sombra en sistemas agroforestales</strong> (café, cacao, palma con diversificación). Los árboles reducen la radiación que llega al cultivo. Eso trae ventajas (temperatura, humedad, diversidad) y también un costo, que puede pesar más donde ya hay poca luz por la nubosidad.</li>
+    <li><strong>Surcos e invernaderos.</strong> Entender la trayectoria del Sol y el ángulo de incidencia permite decidir hacia dónde orientar los surcos o el techo de un invernadero. Una recomendación habitual es norte-sur, para repartir la luz de forma pareja a ambos lados de la planta. Esta decisión pesa más en latitudes altas que cerca del ecuador, donde el Sol está alto casi todo el año. La cubierta del invernadero también reduce la radiación que entra.</li>
+  </ul>
+    </article>
+    <article class="concept-card">
+      <span class="concept-num" aria-hidden="true">06</span>
+      <h3>Permite estimar la radiación donde no hay sensores</h3>
+  <p>No todas las estaciones tienen piranómetro. Muchas registran brillo solar (<i>n</i>) con heliógrafo, o solo temperatura. Con <i>n</i>/<i>N</i> y <i>R</i><sub>a</sub> se estima <i>R</i><sub>s</sub> con Ångström-Prescott, y con solo las temperaturas máxima y mínima también se puede estimar usando <i>R</i><sub>a</sub> (método de Hargreaves, descrito en FAO-56). Los coeficientes <i>a</i><sub>s</sub> = 0.25 y <i>b</i><sub>s</sub> = 0.50 son valores generales: si existen datos medidos en la zona, conviene calibrarlos localmente.</p>
+    </article>
+  </div>
+
+  <div class="note">
+    <strong>Para discutir en clase</strong>
+    <ol>
+      <li>Si <i>R</i><sub>a</sub> casi no cambia durante el año en Bogotá, ¿qué explica que la radiación que recibe el cultivo sí varíe de un mes a otro?</li>
+      <li>Un cafetal con sombra deja pasar solo el 60 % de la luz. ¿En qué condiciones de nubosidad esa pérdida preocuparía más?</li>
+      <li>¿Por qué quien cultiva crisantemo en la Sabana de Bogotá debe manejar el fotoperiodo con luz artificial o cortinas, mientras que en latitudes altas el cambio de estación ya lo hace por él?</li>
+    </ol>
+  </div>
+</section>
+
+<section id="taller">
+  <h2>Taller práctico</h2>
+  <p>Resuelve primero con calculadora y comprueba después en el laboratorio. Usa 4 decimales en los pasos intermedios, para que los redondeos no te alejen del resultado. Los botones "Cargar en el laboratorio" preparan la ciudad y la fecha de cada problema.</p>
+
+  <h3>Ejemplo resuelto: Facatativá, 15 de abril</h3>
+  <p><strong>Enunciado.</strong> Calcula la radiación extraterrestre (<i>R</i><sub>a</sub>) y la duración máxima del día (<i>N</i>) para Facatativá, Cundinamarca (<i>φ</i> = 4.81° N), el 15 de abril (<i>J</i> = 105).</p>
+  <div class="alert"><strong>⚠ Radianes, no grados.</strong> Las funciones trigonométricas de FAO-56 trabajan en radianes. Pon la calculadora en modo RAD, o convierte antes: <i>φ</i><sub>rad</sub> = <i>φ</i>° × π / 180. Es el error más común. Comprobación rápida: el 21 de junio (<i>J</i> = 172) la declinación debe dar +0.409 rad.</div>
+  <ol class="steps">
+    <li><strong>Latitud en radianes.</strong> <i>φ</i> = 4.81° × π/180 = <span class="res">0.0840 rad</span></li>
+    <li><strong>Declinación solar</strong> (ec. 24). 2π·105/365 = 1.8075, y 1.8075 − 1.39 = 0.4175. Entonces sen(0.4175) = 0.4055 y <i>δ</i> = 0.409 × 0.4055 = <span class="res">0.1658 rad</span> (+9.50°).</li>
+    <li><strong>Distancia relativa Tierra-Sol</strong> (ec. 23). cos(1.8075) = −0.2345, así que <i>d</i><sub>r</sub> = 1 + 0.033 × (−0.2345) = <span class="res">0.9923</span></li>
+    <li><strong>Ángulo horario de la puesta del Sol</strong> (ec. 25). tan(0.0840) = 0.0841 y tan(0.1658) = 0.1674, de modo que −0.0841 × 0.1674 = −0.0141. Entonces <i>ω</i><sub>s</sub> = arccos(−0.0141) = <span class="res">1.5849 rad</span> (90.81°).</li>
+    <li><strong>Duración máxima del día</strong> (ec. 34). <i>N</i> = (24/π) × 1.5849 = <span class="res">12.11 h</span></li>
+    <li><strong>Radiación extraterrestre</strong> (ec. 21).
+      <br>Constante: (24·60/π) × 0.0820 = 37.5860, y multiplicada por <i>d</i><sub>r</sub>: 37.5860 × 0.9923 = 37.2966.
+      <br>Primer término: 1.5849 × sen(0.0840) × sen(0.1658) = 1.5849 × 0.0839 × 0.1651 = 0.0219.
+      <br>Segundo término: cos(0.0840) × cos(0.1658) × sen(1.5849) = 0.9965 × 0.9863 × 0.9999 = 0.9827.
+      <br><i>R</i><sub>a</sub> = 37.2966 × (0.0219 + 0.9827) = 37.2966 × 1.0046 = <span class="res">37.47 MJ m<sup>−2</sup> día<sup>−1</sup></span></li>
+  </ol>
+  <p>Para pensar: Facatativá está a 2586 m. Con la ecuación 37, <i>R</i><sub>so</sub> = (0.75 + 2×10<sup>−5</sup> × 2586) × 37.47 = 30.04 MJ m<sup>−2</sup> día<sup>−1</sup>. Es la radiación máxima que llegaría con cielo despejado.</p>
+  <p><button type="button" class="btn" data-load='{"a":"Facatativá","j":105}'>Cargar estos valores en el laboratorio ↑</button></p>
+
+  <h3>Cinco ejercicios</h3>
+
+  <div class="card ex">
+    <h3>Ejercicio 1. Geometría solar y solsticios (Bogotá y Madrid)</h3>
+    <p>Calcula la declinación solar (<i>δ</i>) y el ángulo cenital al mediodía (<i>θ</i><sub>z</sub> = |<i>φ</i> − <i>δ</i>|) en los solsticios de junio (<i>J</i> = 172) y diciembre (<i>J</i> = 355) para Bogotá (4.71° N) y Madrid, España (40.4° N). Explica hacia qué punto cardinal apunta la sombra al mediodía en Bogotá en cada fecha.</p>
+    <p>Después, piensa como agrónomo: ¿hacia qué puntos cardinales (norte-sur o este-oeste) orientarías los surcos de un cultivo en hilera, o las naves de un invernadero, para minimizar el autosombreamiento entre filas? ¿En cuál de las dos ciudades, Bogotá o Madrid, España, esta decisión es más crítica?</p>
+    <p><button type="button" class="btn ghost" data-load='{"a":"Bogotá","b":"Madrid (España)","j":172}'>Cargar en el laboratorio ↑</button></p>
+    <details class="sol"><summary>Ver procedimiento y respuesta</summary>
+      <div>
+        <ol class="steps">
+          <li><i>J</i> = 172: 2π·172/365 − 1.39 = 1.5708, sen(1.5708) = 1.0000, entonces <i>δ</i> = 0.409 rad = <strong>+23.43°</strong>.</li>
+          <li><i>J</i> = 355: 2π·355/365 − 1.39 = 4.7210, sen(4.7210) = −1.0000, entonces <i>δ</i> = −0.409 rad = <strong>−23.43°</strong>.</li>
+          <li>Bogotá: junio |4.71 − 23.43| = <strong>18.72°</strong>. Diciembre |4.71 − (−23.43)| = <strong>28.14°</strong>.</li>
+          <li>Madrid, España: junio |40.4 − 23.43| = <strong>16.97°</strong>. Diciembre |40.4 − (−23.43)| = <strong>63.83°</strong>.</li>
+          <li><strong>Sombra en Bogotá.</strong> En junio <i>δ</i> (23.43°) es mayor que <i>φ</i> (4.71°): el Sol está al norte del cenit, así que la sombra apunta al <strong>sur</strong>. En diciembre el Sol está al sur y la sombra apunta al <strong>norte</strong>. En las fechas en que <i>δ</i> = 4.71° (alrededor de abril y septiembre) el Sol pasa por el cenit y casi no hay sombra al mediodía.</li>
+        </ol>
+        <p>Lectura: en diciembre cos(63.83°) = 0.44 en Madrid, España, contra cos(28.14°) = 0.88 en Bogotá. Cada m² de Madrid recibe la mitad de energía que cada m² de Bogotá.</p>
+        <p><strong>Orientación de surcos y naves.</strong></p>
+        <ol class="steps">
+          <li><strong>Recomendación general: norte-sur.</strong> Con las filas orientadas de norte a sur, el Sol ilumina la cara este de las plantas en la mañana, el dosel superior al mediodía y la cara oeste en la tarde. La radiación se reparte de forma pareja entre las dos caras de cada hilera.</li>
+          <li><strong>Si se orientaran de este a oeste en Madrid, España.</strong> El Sol siempre cruza por el sur y en invierno llega a <i>θ</i><sub>z</sub> = 63.83°. La sombra de una planta mide entonces tan(63.83°) = 2.04 veces su altura y cae sobre la hilera situada al norte durante buena parte del día. El autosombreamiento es grande.</li>
+          <li><strong>En Bogotá.</strong> El máximo de <i>θ</i><sub>z</sub> es 28.14°, de modo que la sombra mide a lo sumo tan(28.14°) = 0.53 veces la altura. Además, como la declinación va de +23.4° a −23.4° y la latitud es 4.71° N, el Sol pasa unos meses al norte y otros al sur del cenit: la sombra no cae siempre sobre la misma hilera.</li>
+          <li><strong>Respuesta.</strong> La orientación importa más en <strong>Madrid</strong>. En Bogotá la decisión puede flexibilizarse según otros factores: la pendiente del terreno, o la dirección del viento si se busca ventilar el invernadero.</li>
+        </ol>
+        <p>Es una regla general: el efecto real también depende de la altura de la planta, del espaciamiento entre hileras y de la arquitectura del cultivo.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="card ex">
+    <h3>Ejercicio 2. Fotoperiodo y floración (<i>N</i>)</h3>
+    <p>Calcula la duración astronómica del día (<i>N</i>) el 21 de diciembre (<i>J</i> = 355) para Bogotá (4.71° N), Buenos Aires (34.6° S) y Madrid (40.4° N). Relaciona los resultados con el manejo de luz artificial en cultivos de crisantemo en la Sabana de Bogotá.</p>
+    <p><button type="button" class="btn ghost" data-load='{"a":"Bogotá","b":"Buenos Aires (Argentina)","j":355}'>Cargar en el laboratorio ↑</button></p>
+    <details class="sol"><summary>Ver procedimiento y respuesta</summary>
+      <div>
+        <p>Con <i>δ</i> = −0.409 rad (tan <i>δ</i> = −0.4334) y <i>N</i> = (24/π) arccos(−tan <i>φ</i> · tan <i>δ</i>):</p>
+        <ol class="steps">
+          <li>Bogotá: <i>φ</i> = 0.0822 rad, tan <i>φ</i> = 0.0824, producto = 0.0357, <i>ω</i><sub>s</sub> = 1.5351 rad. <i>N</i> = <strong>11.73 h</strong>.</li>
+          <li>Buenos Aires: <i>φ</i> = −0.6039 rad, tan <i>φ</i> = −0.6899, producto = −0.2990, <i>ω</i><sub>s</sub> = 1.8744 rad. <i>N</i> = <strong>14.32 h</strong>.</li>
+          <li>Madrid: <i>φ</i> = 0.7051 rad, tan <i>φ</i> = 0.8511, producto = 0.3689, <i>ω</i><sub>s</sub> = 1.1930 rad. <i>N</i> = <strong>9.11 h</strong>.</li>
+        </ol>
+        <p>Lectura: en diciembre es verano en Buenos Aires (días largos) e invierno en Madrid (días cortos), mientras que en Bogotá el día dura unas 11.7 h, siempre cerca de 12. El crisantemo es una planta de día corto, y en la Sabana el día natural es siempre corto. Sin intervención, las plantas florecerían demasiado pronto. Por eso se alarga artificialmente el día con luz durante la etapa vegetativa y después se deja el día corto natural (o se usan cortinas de oscuridad) para inducir la floración. En latitudes altas la propia estación hace ese cambio.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="card ex">
+    <h3>Ejercicio 3. Estimar <i>R</i><sub>s</sub> con datos de heliógrafo (Ångström-Prescott)</h3>
+    <p>Una estación en Chinchiná, Caldas (4.98° N), registró <i>n</i> = 3.2 horas de brillo solar el 20 de octubre (<i>J</i> = 293). Calcula <i>N</i>, la fracción <i>n</i>/<i>N</i> y estima la radiación solar global (<i>R</i><sub>s</sub>) con <i>a</i><sub>s</sub> = 0.25 y <i>b</i><sub>s</sub> = 0.50.</p>
+    <p><button type="button" class="btn ghost" data-load='{"a":"Chinchiná","j":293,"nn":0.27}'>Cargar en el laboratorio ↑</button></p>
+    <details class="sol"><summary>Ver procedimiento y respuesta</summary>
+      <div>
+        <ol class="steps">
+          <li><i>φ</i> = 0.0869 rad. <i>δ</i> = 0.409 sen(2π·293/365 − 1.39) = −0.2004 rad. <i>d</i><sub>r</sub> = 1.0107.</li>
+          <li><i>ω</i><sub>s</sub> = arccos(−tan(0.0869) tan(−0.2004)) = 1.5531 rad, entonces <i>N</i> = (24/π)(1.5531) = <strong>11.86 h</strong>.</li>
+          <li><i>n</i>/<i>N</i> = 3.2 / 11.86 = <strong>0.270</strong>.</li>
+          <li><i>R</i><sub>a</sub> (ec. 21) = <strong>36.06 MJ m<sup>−2</sup> día<sup>−1</sup></strong>.</li>
+          <li><i>R</i><sub>s</sub> = (0.25 + 0.50 × 0.270) × 36.06 = 0.3849 × 36.06 = <strong>13.88 MJ m<sup>−2</sup> día<sup>−1</sup></strong>, o sea el 38 % de <i>R</i><sub>a</sub>.</li>
+        </ol>
+      </div>
+    </details>
+  </div>
+
+  <div class="card ex">
+    <h3>Ejercicio 4. De radiación solar a biomasa potencial (PAR y Monteith)</h3>
+    <p>Con el valor de <i>R</i><sub>s</sub> del Ejercicio 3 para Chinchiná, estima la PAR incidente (48 % de <i>R</i><sub>s</sub>), la PAR interceptada por un cultivo con IAF = 2.8 y <i>k</i> = 0.55, y la producción diaria de materia seca (g m<sup>−2</sup> día<sup>−1</sup>) suponiendo una eficiencia de uso de la radiación <i>ε</i> = 1.6 g MJ<sup>−1</sup> de PAR interceptada.</p>
+    <p>Después repite el cálculo para un día despejado en la misma finca y la misma fecha (<i>n</i> = 8.5 h) y compara: ¿en qué porcentaje cae la producción potencial en el día nublado (<i>n</i> = 3.2 h)?</p>
+    <details class="sol"><summary>Ver procedimiento y respuesta</summary>
+      <div>
+        <ol class="steps">
+          <li>PAR incidente = 0.48 × 13.88 = <strong>6.66 MJ m<sup>−2</sup> día<sup>−1</sup></strong>.</li>
+          <li>Fracción interceptada = 1 − e<sup>−0.55 × 2.8</sup> = 1 − e<sup>−1.54</sup> = 1 − 0.2144 = <strong>0.7856</strong> (78.6 %).</li>
+          <li>PAR interceptada = 6.66 × 0.7856 = <strong>5.23 MJ m<sup>−2</sup> día<sup>−1</sup></strong>.</li>
+          <li>Materia seca = <i>ε</i> × PAR interceptada = 1.6 × 5.23 = <strong>8.37 g m<sup>−2</sup> día<sup>−1</sup></strong> (unos 84 kg ha<sup>−1</sup> día<sup>−1</sup>).</li>
+        </ol>
+        <p>Es una producción potencial: no descuenta estrés hídrico, nutricional ni pérdidas por respiración y reparto a órganos no cosechables.</p>
+        <p><strong>Comparación con un día despejado</strong> (misma finca y fecha, <i>n</i> = 8.5 h):</p>
+        <ol class="steps">
+          <li><i>n</i>/<i>N</i> = 8.5 / 11.86 = 0.717. <i>R</i><sub>s</sub> = (0.25 + 0.50 × 0.717) × 36.06 = 0.6084 × 36.06 = <strong>21.9 MJ m<sup>−2</sup> día<sup>−1</sup></strong>.</li>
+          <li>PAR = 0.48 × 21.9 = 10.53. PAR interceptada = 10.53 × 0.7856 = 8.27. Materia seca = 1.6 × 8.27 = <strong>13.2 g m<sup>−2</sup> día<sup>−1</sup></strong>.</li>
+          <li>Caída por nubosidad = (13.2 − 8.4) / 13.2 ≈ <strong>37 %</strong>.</li>
+        </ol>
+        <p>Lectura: como <i>ε</i>, el IAF y <i>k</i> no cambian entre los dos días, la producción potencial cae en la misma proporción que <i>R</i><sub>s</sub> (13.88 frente a 21.9 MJ m<sup>−2</sup> día<sup>−1</sup>). El día nublado produce solo cerca del 63 % del despejado. Si una semana de lluvias fuera como el día nublado, se dejarían de producir cerca de 34 g m<sup>−2</sup> (unos 340 kg ha<sup>−1</sup>) de materia seca potencial. Es un orden de magnitud para dimensionar el costo de la nubosidad, no una predicción de cosecha.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="card ex">
+    <h3>Ejercicio 5. Análisis conceptual: nubosidad y sombra agroforestal</h3>
+    <p>Dos fincas cafeteras ubicadas a 4.5° N tienen climas distintos: la Finca 1 está en una vertiente seca y despejada (<i>n</i>/<i>N</i> = 0.75) y la Finca 2 en una zona muy nublada (<i>n</i>/<i>N</i> = 0.25). Ambas evalúan establecer árboles de sombrío que interceptan el 35 % de la luz incidente. Tomando el 15 de abril (<i>J</i> = 105), ¿en cuál de las dos fincas el sombrío representa un mayor riesgo de limitar la fotosíntesis y el llenado de grano? Justifica con números.</p>
+    <p><button type="button" class="btn ghost" data-load='{"lat":4.5,"z":1500,"j":105,"nn":0.75}'>Cargar en el laboratorio ↑</button></p>
+    <details class="sol"><summary>Ver procedimiento y respuesta</summary>
+      <div>
+        <ol class="steps">
+          <li><i>R</i><sub>a</sub> a 4.5° N el 15 de abril = <strong>37.43 MJ m<sup>−2</sup> día<sup>−1</sup></strong>.</li>
+          <li>Finca 1: <i>R</i><sub>s</sub> = (0.25 + 0.50 × 0.75) × 37.43 = 0.625 × 37.43 = <strong>23.40</strong>. Con sombrío queda el 65 %: <strong>15.21</strong>. PAR (48 %): de 11.23 baja a <strong>7.30</strong>.</li>
+          <li>Finca 2: <i>R</i><sub>s</sub> = (0.25 + 0.50 × 0.25) × 37.43 = 0.375 × 37.43 = <strong>14.04</strong>. Con sombrío queda <strong>9.12</strong>. PAR: de 6.74 baja a <strong>4.38</strong>.</li>
+        </ol>
+        <p>El sombrío quita el mismo 35 % en las dos fincas. En valores absolutos la Finca 1 pierde más (8.19 contra 4.91 MJ m<sup>−2</sup> día<sup>−1</sup>), pero le quedan 15.2 MJ, mientras que a la Finca 2 le quedan solo 9.1 MJ, cerca del 40 % menos. Con tan poca luz restante (PAR de 4.4 MJ m<sup>−2</sup> día<sup>−1</sup>), la fotosíntesis responde más a cada pérdida adicional.</p>
+        <p><strong>Respuesta:</strong> el riesgo es mayor en la <strong>Finca 2</strong>. En la Finca 1, además, parte de la luz puede sobrar (el café suele alcanzar su máxima fotosíntesis con luz moderada), de modo que el sombrío incluso puede ayudar a bajar el exceso de luz y de temperatura.</p>
+      </div>
+    </details>
+  </div>
+
+  <h3>Tres retos con verificación automática</h3>
+  <p>Escribe tu respuesta y pulsa "Verificar". La página acepta un margen pequeño para absorber los redondeos de la calculadora.</p>
+
+  <div class="card ex reto">
+    <h3>Reto 1. Cálculo directo de <i>R</i><sub>s</sub></h3>
+    <p>Para Montería (<i>φ</i> = 8.75° N) el 10 de febrero (<i>J</i> = 41), el heliógrafo registró <i>n</i> = 7.4 horas de brillo solar. Calcula la radiación solar global <i>R</i><sub>s</sub> en MJ m<sup>−2</sup> día<sup>−1</sup> (usa <i>a</i><sub>s</sub> = 0.25 y <i>b</i><sub>s</sub> = 0.50).</p>
+    <p><button type="button" class="btn ghost" data-load='{"a":"Montería","j":41}'>Cargar en el laboratorio ↑</button></p>
+    <div class="chk"><label for="r1">Tu respuesta</label><input type="number" step="any" id="r1"> <span>MJ m<sup>−2</sup> día<sup>−1</sup></span> <button type="button" class="btn" data-check="1">Verificar</button></div>
+    <p class="fb" id="fb1" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="card ex reto">
+    <h3>Reto 2. Equivalente hídrico de la radiación</h3>
+    <p>Una plantación de palma de aceite en Montería recibe la radiación <i>R</i><sub>s</sub> del Reto 1. Conviértela a su lámina equivalente de agua evaporable, en mm día<sup>−1</sup> (calor latente de vaporización <i>λ</i> = 2.45 MJ kg<sup>−1</sup>, factor 0.408). Recuerda que 1 mm día<sup>−1</sup> equivale a 1 L m<sup>−2</sup> día<sup>−1</sup>, es decir, a 10 m<sup>3</sup> ha<sup>−1</sup> día<sup>−1</sup>.</p>
+    <div class="chk"><label for="r2">Tu respuesta</label><input type="number" step="any" id="r2"> <span>mm día<sup>−1</sup></span> <button type="button" class="btn" data-check="2">Verificar</button></div>
+    <p class="fb" id="fb2" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="card ex reto">
+    <h3>Reto 3. Cálculo inverso: despejar las horas de brillo solar (<i>n</i>)</h3>
+    <p>Un piranómetro en Palmira (<i>φ</i> = 3.54° N) midió <i>R</i><sub>s</sub> = 21.5 MJ m<sup>−2</sup> día<sup>−1</sup> el 15 de agosto (<i>J</i> = 227). Con los coeficientes estándar de la FAO, ¿cuántas horas de brillo solar (<i>n</i>) hubo aproximadamente ese día?</p>
+    <p><button type="button" class="btn ghost" data-load='{"a":"Palmira","j":227}'>Cargar en el laboratorio ↑</button></p>
+    <div class="chk"><label for="r3">Tu respuesta</label><input type="number" step="any" id="r3"> <span>horas</span> <button type="button" class="btn" data-check="3">Verificar</button></div>
+    <p class="fb" id="fb3" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="note"><strong>Hacia el Tema 2.</strong> No toda la <i>R</i><sub>s</sub> que llega se aprovecha. Parte se refleja de inmediato por el albedo de la cobertura: alrededor del 23 % en el pasto de referencia (los cultivos suelen estar entre 10 % y 25 %). El Tema 2 sigue lo que queda: el balance de energía.</div>
+</section>
+
+<details class="eqs card" id="guia">
+  <summary>Guía para el docente</summary>
+  <h3 style="margin-top:12px">Qué comparar en pantalla</h3>
+  <ul>
+    <li>Bogotá contra Madrid (España), recorriendo el año: una <i>R</i><sub>a</sub> casi plana contra una con estaciones marcadas.</li>
+    <li>Una sola ciudad, moviendo <i>n</i>/<i>N</i> (o con los presets lluvioso, intermedio y seco): el techo <i>R</i><sub>a</sub> no cambia, pero <i>R</i><sub>s</sub> sí.</li>
+    <li>El 21 de diciembre con Madrid y Buenos Aires: hemisferios opuestos, estaciones invertidas.</li>
+    <li>La escena del planeta al recorrer el día del año: el Sol vertical sube y baja entre los trópicos, y <i>θ</i><sub>z</sub> cambia con él.</li>
+    <li>Una ciudad andina contra una de costa: la razón <i>R</i><sub>s</sub>/<i>R</i><sub>so</sub> de las tarjetas. <i>R</i><sub>so</sub> es mayor en la montaña porque hay menos atmósfera que atravesar.</li>
+  </ul>
+  <h3>Errores frecuentes</h3>
+  <ul>
+    <li><strong>Calculadora en grados en lugar de radianes.</strong> Síntoma: para <i>J</i> = 105 la declinación sale cercana a 0.003 en vez de 0.166.</li>
+    <li>Olvidar el signo negativo de la latitud sur.</li>
+    <li>Confundir <i>N</i> (horas posibles de sol), <i>n</i> (horas medidas) y <i>n</i>/<i>N</i> (fracción).</li>
+    <li>Usar <i>R</i><sub>a</sub> donde va <i>R</i><sub>s</sub>, o dejar el resultado en MJ cuando piden mm día<sup>−1</sup>.</li>
+    <li>Mezclar la hora solar con la hora del reloj.</li>
+  </ul>
+  <h3>Dónde está cada ecuación (FAO-56, capítulo 3)</h3>
+  <p>Ec. 21 (<i>R</i><sub>a</sub> diaria), 23 (<i>d</i><sub>r</sub>), 24 (<i>δ</i>), 25 (<i>ω</i><sub>s</sub>), 28 (<i>R</i><sub>a</sub> horaria), 34 (<i>N</i>), 35 (Ångström-Prescott) y 37 (<i>R</i><sub>so</sub>).</p>
+</details>
+
+</main>
+
+<footer>
+  <p><strong>Fuentes.</strong> Allen, R.G., Pereira, L.S., Raes, D. y Smith, M. (1998). <i>Crop evapotranspiration: guidelines for computing crop water requirements.</i> FAO Irrigation and Drainage Paper 56, capítulo 3. Ångström, A. (1924) y Prescott, J.A. (1940), para la relación entre brillo solar y radiación. Monteith, J.L. (1977). Climate and the efficiency of crop production in Britain. <i>Philosophical Transactions of the Royal Society B</i>, 281, 277-294. Contorno de Colombia: archivo COL.geo.json del repositorio público johan/world.geo.json, simplificado.</p>
+  <p>Material de apoyo para el curso de Agroclimatología. Las curvas son modelos simplificados con fines didácticos.</p>
+</footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Constantes y utilidades ---------- */
+  const GSC = 0.0820;               // MJ m-2 min-1 (FAO-56)
+  const GSC_W = GSC * 1e6 / 60;     // 1366.7 W m-2
+  const AS = 0.25, BS = 0.50;       // coeficientes Angstrom-Prescott por defecto de la FAO
+  const W_PER_MJH = 1e6 / 3600;     // 1 MJ m-2 h-1 = 277.8 W m-2
+  const MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const MESC = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const CUM = [0,31,59,90,120,151,181,212,243,273,304,334,365];
+  const rad = d => d * Math.PI / 180;
+  const deg = r => r * 180 / Math.PI;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const $ = id => document.getElementById(id);
+  const f1 = (x, n) => x.toFixed(n === undefined ? 1 : n);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  /* ---------- Ciudades (nombre, latitud, longitud, grupo) ---------- */
+  const CITY_DATA = [
+    // Principales (capitales departamentales)
+    ['Arauca', 7.09, -70.76, 'p'], ['Armenia', 4.53, -75.68, 'p'], ['Barranquilla', 10.96, -74.80, 'p'],
+    ['Bogotá', 4.71, -74.07, 'p'], ['Bucaramanga', 7.13, -73.12, 'p'], ['Cali', 3.45, -76.53, 'p'],
+    ['Cartagena', 10.39, -75.48, 'p'], ['Cúcuta', 7.89, -72.51, 'p'], ['Florencia', 1.61, -75.61, 'p'],
+    ['Ibagué', 4.44, -75.23, 'p'], ['Leticia', -4.21, -69.94, 'p'], ['Manizales', 5.07, -75.52, 'p'],
+    ['Medellín', 6.25, -75.56, 'p'], ['Mitú', 1.25, -70.23, 'p'], ['Mocoa', 1.15, -76.65, 'p'],
+    ['Montería', 8.75, -75.88, 'p'], ['Neiva', 2.93, -75.28, 'p'], ['Pasto', 1.21, -77.28, 'p'],
+    ['Pereira', 4.81, -75.69, 'p'], ['Popayán', 2.44, -76.61, 'p'], ['Puerto Carreño', 6.19, -67.49, 'p'],
+    ['Puerto Inírida', 3.87, -67.92, 'p'], ['Quibdó', 5.69, -76.66, 'p'], ['Riohacha', 11.54, -72.91, 'p'],
+    ['San José del Guaviare', 2.57, -72.64, 'p'], ['Santa Marta', 11.24, -74.20, 'p'], ['Sincelejo', 9.30, -75.40, 'p'],
+    ['Tunja', 5.54, -73.36, 'p'], ['Valledupar', 10.46, -73.25, 'p'], ['Villavicencio', 4.15, -73.63, 'p'],
+    ['Yopal', 5.34, -72.39, 'p'],
+    // Intermedias y zonas agrícolas
+    ['Acacías', 3.99, -73.76, 'i'], ['Aguachica', 8.31, -73.63, 'i'], ['Apartadó', 7.88, -76.63, 'i'],
+    ['Barrancabermeja', 7.07, -73.85, 'i'], ['Buenaventura', 3.88, -77.03, 'i'], ['Cartago', 4.75, -75.91, 'i'],
+    ['Caucasia', 7.98, -75.20, 'i'], ['Chinchiná', 4.98, -75.61, 'i'], ['Duitama', 5.83, -73.03, 'i'],
+    ['Espinal', 4.15, -74.88, 'i'], ['Facatativá', 4.81, -74.36, 'i'], ['Fusagasugá', 4.34, -74.36, 'i'],
+    ['Funza', 4.72, -74.21, 'i'], ['Garzón', 2.20, -75.63, 'i'], ['Girardot', 4.30, -74.80, 'i'],
+    ['Granada (Meta)', 3.54, -73.70, 'i'], ['Honda', 5.21, -74.74, 'i'], ['Ipiales', 0.83, -77.64, 'i'],
+    ['La Dorada', 5.45, -74.66, 'i'], ['Madrid (Cundinamarca)', 4.73, -74.26, 'i'], ['Magangué', 9.24, -74.75, 'i'],
+    ['Maicao', 11.38, -72.24, 'i'], ['Ocaña', 8.24, -73.36, 'i'], ['Pacho', 5.13, -74.16, 'i'],
+    ['Palmira', 3.54, -76.30, 'i'], ['Pamplona', 7.38, -72.65, 'i'], ['Pitalito', 1.85, -76.05, 'i'],
+    ['Rionegro (Antioquia)', 6.15, -75.37, 'i'], ['Sevilla (Valle)', 4.27, -75.94, 'i'], ['Sogamoso', 5.71, -72.93, 'i'],
+    ['Tame', 6.46, -71.74, 'i'], ['Tibacuy', 4.35, -74.45, 'i'], ['Tuluá', 4.08, -76.20, 'i'],
+    ['Tumaco', 1.80, -78.76, 'i'], ['Turbo', 8.09, -76.73, 'i'], ['Zipaquirá', 5.02, -74.00, 'i'],
+    // Referencia internacional
+    ['Buenos Aires (Argentina)', -34.6, -58.4, 'x'], ['Madrid (España)', 40.4, -3.7, 'x'], ['Quito (Ecuador)', -0.2, -78.5, 'x']
+  ];
+  // Altitudes aproximadas en metros sobre el nivel del mar
+  const ALT = {
+    'Arauca': 125, 'Armenia': 1483, 'Barranquilla': 18, 'Bogotá': 2600, 'Bucaramanga': 959, 'Cali': 1018,
+    'Cartagena': 2, 'Cúcuta': 320, 'Florencia': 242, 'Ibagué': 1285, 'Leticia': 96, 'Manizales': 2150,
+    'Medellín': 1495, 'Mitú': 180, 'Mocoa': 590, 'Montería': 18, 'Neiva': 442, 'Pasto': 2527,
+    'Pereira': 1411, 'Popayán': 1737, 'Puerto Carreño': 51, 'Puerto Inírida': 100, 'Quibdó': 43, 'Riohacha': 5,
+    'San José del Guaviare': 175, 'Santa Marta': 6, 'Sincelejo': 213, 'Tunja': 2782, 'Valledupar': 169,
+    'Villavicencio': 467, 'Yopal': 350,
+    'Acacías': 580, 'Aguachica': 170, 'Apartadó': 25, 'Barrancabermeja': 75, 'Buenaventura': 7, 'Cartago': 920,
+    'Caucasia': 50, 'Chinchiná': 1378, 'Duitama': 2530, 'Espinal': 323, 'Facatativá': 2586, 'Fusagasugá': 1728,
+    'Funza': 2548, 'Garzón': 830, 'Girardot': 289, 'Granada (Meta)': 350, 'Honda': 229, 'Ipiales': 2898,
+    'La Dorada': 178, 'Madrid (Cundinamarca)': 2554, 'Magangué': 30, 'Maicao': 70, 'Ocaña': 1202, 'Pacho': 2136,
+    'Palmira': 1001, 'Pamplona': 2342, 'Pitalito': 1318, 'Rionegro (Antioquia)': 2125, 'Sevilla (Valle)': 1612,
+    'Sogamoso': 2569, 'Tame': 335, 'Tibacuy': 1650, 'Tuluá': 960, 'Tumaco': 2, 'Turbo': 2, 'Zipaquirá': 2650,
+    'Buenos Aires (Argentina)': 25, 'Madrid (España)': 650, 'Quito (Ecuador)': 2850
+  };
+  const CITIES = CITY_DATA.map(c => ({ n: c[0], lat: c[1], lon: c[2], g: c[3], z: ALT[c[0]] || 0 }))
+    .sort((a, b) => a.n.localeCompare(b.n, 'es'));
+
+  /* ---------- Contorno de Colombia (lon, lat) ---------- */
+  const COL = [[-75.37,-0.15],[-75.80,0.08],[-76.29,0.42],[-76.58,0.26],[-77.42,0.40],[-77.67,0.83],[-77.86,0.81],[-78.86,1.38],[-78.99,1.69],[-78.62,1.77],[-78.66,2.27],[-78.43,2.63],[-77.93,2.70],[-77.51,3.33],[-77.13,3.85],[-77.50,4.09],[-77.31,4.67],[-77.53,5.58],[-77.32,5.85],[-77.48,6.69],[-77.88,7.22],[-77.75,7.71],[-77.43,7.64],[-77.24,7.94],[-77.47,8.52],[-77.35,8.67],[-76.84,8.64],[-76.09,9.34],[-75.67,9.44],[-75.66,9.77],[-75.48,10.62],[-74.91,11.08],[-74.28,11.10],[-74.20,11.31],[-73.41,11.23],[-72.63,11.73],[-72.24,11.96],[-71.75,12.44],[-71.40,12.38],[-71.14,12.11],[-71.33,11.78],[-71.97,11.61],[-72.23,11.11],[-72.61,10.82],[-72.91,10.45],[-73.03,9.74],[-73.30,9.15],[-72.79,9.09],[-72.66,8.63],[-72.44,8.41],[-72.36,8.00],[-72.48,7.63],[-72.44,7.42],[-72.20,7.34],[-71.96,6.99],[-70.67,7.09],[-70.09,6.96],[-69.39,6.10],[-68.99,6.21],[-68.27,6.15],[-67.70,6.27],[-67.34,6.10],[-67.52,5.56],[-67.74,5.22],[-67.82,4.50],[-67.62,3.84],[-67.34,3.54],[-67.30,3.32],[-67.81,2.82],[-67.45,2.60],[-67.18,2.25],[-66.88,1.25],[-67.07,1.13],[-67.26,1.72],[-67.54,2.04],[-67.87,1.69],[-69.82,1.71],[-69.80,1.09],[-69.22,0.99],[-69.25,0.60],[-69.45,0.71],[-70.02,0.54],[-70.02,-0.19],[-69.58,-0.55],[-69.42,-1.12],[-69.44,-1.56],[-69.89,-4.30],[-70.39,-3.77],[-70.69,-3.74],[-70.05,-2.73],[-70.81,-2.26],[-71.41,-2.34],[-71.77,-2.17],[-72.33,-2.43],[-73.07,-2.31],[-73.66,-1.26],[-74.12,-1.00],[-74.44,-0.53],[-75.11,-0.06],[-75.37,-0.15]];
+
+  /* ---------- Física (FAO-56) ---------- */
+  const decl = J => 0.409 * Math.sin(2 * Math.PI * J / 365 - 1.39);          // ec. 24 (rad)
+  const dr = J => 1 + 0.033 * Math.cos(2 * Math.PI * J / 365);               // ec. 23
+  const sunset = (phi, d) => Math.acos(clamp(-Math.tan(phi) * Math.tan(d), -1, 1)); // ec. 25
+  function daylight(latDeg, J) { return 24 / Math.PI * sunset(rad(latDeg), decl(J)); } // ec. 34
+  function Ra(latDeg, J) {                                                    // ec. 21, MJ m-2 dia-1
+    const p = rad(latDeg), d = decl(J), ws = sunset(p, d);
+    return (24 * 60 / Math.PI) * GSC * dr(J) *
+      (ws * Math.sin(p) * Math.sin(d) + Math.cos(p) * Math.cos(d) * Math.sin(ws));
+  }
+  function RaHour(latDeg, J, h) {                                             // ec. 28, hora [h, h+1] solar, MJ m-2 h-1
+    const p = rad(latDeg), d = decl(J), ws = sunset(p, d);
+    const w1 = Math.max(Math.PI / 12 * (h - 12), -ws);
+    const w2 = Math.min(Math.PI / 12 * (h + 1 - 12), ws);
+    if (w2 <= w1) return 0;
+    return (12 * 60 / Math.PI) * GSC * dr(J) *
+      ((w2 - w1) * Math.sin(p) * Math.sin(d) + Math.cos(p) * Math.cos(d) * (Math.sin(w2) - Math.sin(w1)));
+  }
+  window.AgroRad = { Ra, RaHour, decl, dr, daylight, sunset }; // expuesto para pruebas
+
+  /* ---------- Estado ---------- */
+  const bogota = CITIES.find(c => c.n === 'Bogotá');
+  const cityObj = c => ({ n: c.n, lat: c.lat, lon: c.lon, z: c.z });
+  const state = { A: cityObj(bogota), B: null, J: 105, nN: 0.5 };
+  const D = { A: null, B: null };   // series calculadas
+  const A = { hover: null, geo: null };
+  const H = { hover: null, geo: null };
+
+  function fecha(J) { let m = 0; while (J > CUM[m + 1]) m++; return { m: m, d: J - CUM[m] }; }
+  function fechaTxt(J) { const f = fecha(J); return f.d + ' de ' + MES[f.m]; }
+  function latTxt(l) { return Math.abs(l).toFixed(2) + '° ' + (l >= 0 ? 'N' : 'S'); }
+  function hhmm(h) { const m = Math.round(h * 60), hh = Math.floor(m / 60), mm = m % 60; return hh + ':' + (mm < 10 ? '0' : '') + mm; }
+  const factor = () => AS + BS * state.nN;
+  const nameOf = c => c.n || ('φ = ' + latTxt(c.lat));
+  const cmp = () => !!state.B;
+
+  function series(lat) {
+    const k = factor(), ra = [], rs = [], hra = [], hrs = [];
+    for (let J = 1; J <= 365; J++) { const r = Ra(lat, J); ra.push(r); rs.push(k * r); }
+    for (let h = 0; h < 24; h++) { const v = RaHour(lat, state.J, h); hra.push(v); hrs.push(v * k); }
+    return { lat: lat, ra: ra, rs: rs, hra: hra, hrs: hrs, min: Math.min.apply(null, ra), max: Math.max.apply(null, ra) };
+  }
+  function compute() {
+    D.A = series(state.A.lat);
+    D.B = state.B ? series(state.B.lat) : null;
+  }
+
+  /* ---------- Selectores de ciudad ---------- */
+  function fillSelect(sel, withNone) {
+    let html = withNone ? '<option value="">Sin comparación</option>' : '<option value="__custom" hidden>Latitud personalizada</option>';
+    [['p', 'Ciudades principales (capitales)'], ['i', 'Ciudades intermedias y zonas agrícolas'], ['x', 'Referencia internacional']].forEach(g => {
+      html += '<optgroup label="' + g[1] + '">' + CITIES.filter(c => c.g === g[0]).map(c =>
+        '<option value="' + esc(c.n) + '">' + esc(c.n) + ' (' + latTxt(c.lat) + ')</option>').join('') + '</optgroup>';
+    });
+    sel.innerHTML = html;
+  }
+
+  /* ---------- Leyendas ---------- */
+  function legendHtml(raTxt, rsTxt) {
+    let h = '<span><i class="lk" style="background:var(--s1)"></i><span>' + raTxt + '</span></span>' +
+      '<span><i class="lk" style="background:var(--s2)"></i><span>' + rsTxt + '</span></span>';
+    if (cmp()) {
+      h += '<span><i class="lk ck"></i><span><b>A</b> ' + esc(nameOf(state.A)) + ' (línea continua)</span></span>' +
+        '<span><i class="lk ck dash"></i><span><b>B</b> ' + esc(nameOf(state.B)) + ' (línea discontinua)</span></span>';
+    }
+    return h;
+  }
+
+  /* ---------- Gráficos ---------- */
+  const lineD = (arr, fx, fy) => arr.map((v, i) => (i ? 'L' : 'M') + fx(i).toFixed(1) + ' ' + fy(v).toFixed(1)).join('');
+  const lab = (v, who) => '<tspan>R</tspan><tspan dy="3" font-size="9">' + v + '</tspan>' + (who ? '<tspan dy="-3"> ' + who + '</tspan>' : '');
+  const DASH = '7 5';
+
+  function keyStyle(c, dash) {
+    return dash ? 'background:repeating-linear-gradient(90deg,' + c + ' 0 4px,transparent 4px 7px)' : 'background:' + c;
+  }
+  function tipHtml(head, rows) {
+    return '<div class="h">' + head + '</div>' + rows.map(r =>
+      '<div class="r"><i class="lk" style="' + keyStyle(r.c, r.dash) + '"></i><b>' + r.v + '</b><span>' + r.l + '</span></div>').join('');
+  }
+  function showTip(tip, box, px, html) {
+    tip.innerHTML = html;
+    tip.hidden = false;
+    const card = box.parentElement, br = box.getBoundingClientRect(), cr = card.getBoundingClientRect();
+    const w = tip.offsetWidth;
+    let left = (br.left - cr.left) + px + 14;
+    if (left + w > cr.width) left = (br.left - cr.left) + px - 14 - w;
+    tip.style.left = Math.max(0, left) + 'px';
+    tip.style.top = (br.top - cr.top + 30) + 'px';
+  }
+  function placeLabels(items, minGap) {
+    items.sort((a, b) => a.y - b.y);
+    const out = []; let last = -1e9;
+    items.forEach(it => { if (it.y - last >= minGap) { out.push(it); last = it.y; } });
+    return out;
+  }
+
+  function drawAnnual() {
+    const box = $('annualChart');
+    const W = Math.max(300, Math.floor(box.clientWidth));
+    const Ht = W < 560 ? 270 : 320;
+    const m = { l: 46, r: cmp() ? 54 : 30, t: 24, b: 30 };
+    const pw = W - m.l - m.r, ph = Ht - m.t - m.b;
+    const X = J => m.l + (J - 1) / 364 * pw;
+    const Y = v => m.t + ph - (v / 50) * ph;
+    A.geo = { m: m, pw: pw, W: W };
+    const wide = W >= 600;
+    let s = '<svg viewBox="0 0 ' + W + ' ' + Ht + '" width="' + W + '" height="' + Ht + '" role="img" aria-label="Radiación extraterrestre y solar global diarias a lo largo del año. Hay una tabla con los valores debajo.">';
+    for (let v = 0; v <= 50; v += 10) {
+      s += '<line class="' + (v === 0 ? 'base' : 'gl') + '" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + Y(v) + '" y2="' + Y(v) + '"/>';
+      s += '<text class="ax" x="' + (m.l - 8) + '" y="' + (Y(v) + 4) + '" text-anchor="end">' + v + '</text>';
+    }
+    s += '<text class="ax" x="' + m.l + '" y="12">MJ m⁻² día⁻¹</text>';
+    if (wide) {
+      [[79, 'equinoccio', 'middle'], [172, 'solsticio', 'middle'], [265, 'equinoccio', 'middle'], [355, 'solsticio', 'end']].forEach(e => {
+        s += '<line class="gl" x1="' + X(e[0]) + '" x2="' + X(e[0]) + '" y1="' + Y(50) + '" y2="' + Y(0) + '"/>';
+        s += '<text class="ax-m" x="' + (e[2] === 'end' ? X(e[0]) + 4 : X(e[0])) + '" y="' + Y(48.4) + '" text-anchor="' + e[2] + '">' + e[1] + '</text>';
+      });
+    }
+    for (let i = 0; i < 12; i++) {
+      s += '<line class="tick" x1="' + X(CUM[i] + 1) + '" x2="' + X(CUM[i] + 1) + '" y1="' + Y(0) + '" y2="' + (Y(0) + 4) + '"/>';
+      if (W >= 420 || i % 2 === 0) s += '<text class="ax" x="' + X((CUM[i] + CUM[i + 1]) / 2 + 0.5) + '" y="' + (Ht - 10) + '" text-anchor="middle">' + MESC[i] + '</text>';
+    }
+    const fx = i => X(i + 1);
+    const ln = (arr, c, dash) => '<path d="' + lineD(arr, fx, Y) + '" fill="none" stroke="' + c + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"' + (dash ? ' stroke-dasharray="' + DASH + '"' : '') + '/>';
+    s += '<path d="' + lineD(D.A.rs, fx, Y) + 'L' + X(365) + ' ' + Y(0) + 'L' + X(1) + ' ' + Y(0) + 'Z" fill="var(--s2)" opacity="0.12"/>';
+    s += ln(D.A.ra, 'var(--s1)') + ln(D.A.rs, 'var(--s2)');
+    if (D.B) s += ln(D.B.ra, 'var(--s1)', true) + ln(D.B.rs, 'var(--s2)', true);
+    let labels = [{ y: Y(D.A.ra[364]), t: lab('a', cmp() ? 'A' : '') }, { y: Y(D.A.rs[364]), t: lab('s', cmp() ? 'A' : '') }];
+    if (D.B) labels.push({ y: Y(D.B.ra[364]), t: lab('a', 'B') }, { y: Y(D.B.rs[364]), t: lab('s', 'B') });
+    placeLabels(labels, 13).forEach(l => { s += '<text class="ax" x="' + (X(365) + 6) + '" y="' + (l.y + 4) + '" fill="var(--ink)">' + l.t + '</text>'; });
+    if (A.hover !== null && A.hover !== state.J) {
+      s += '<line x1="' + X(A.hover) + '" x2="' + X(A.hover) + '" y1="' + Y(50) + '" y2="' + Y(0) + '" stroke="var(--muted)" stroke-width="1"/>';
+    }
+    const xs = X(state.J);
+    s += '<line x1="' + xs + '" x2="' + xs + '" y1="' + Y(50) + '" y2="' + Y(0) + '" stroke="var(--ink)" stroke-width="1.5" opacity="0.6"/>';
+    const dot = (v, c, hollow) => hollow
+      ? '<circle cx="' + xs + '" cy="' + Y(v) + '" r="4" fill="var(--surface)" stroke="' + c + '" stroke-width="2.5"/>'
+      : '<circle cx="' + xs + '" cy="' + Y(v) + '" r="4" fill="' + c + '" stroke="var(--surface)" stroke-width="2"/>';
+    s += dot(D.A.ra[state.J - 1], 'var(--s1)') + dot(D.A.rs[state.J - 1], 'var(--s2)');
+    if (D.B) s += dot(D.B.ra[state.J - 1], 'var(--s1)', true) + dot(D.B.rs[state.J - 1], 'var(--s2)', true);
+    s += '</svg>';
+    box.innerHTML = s;
+  }
+
+  function annualTip(J, px) {
+    const nm = cmp() ? ' · ' + esc(nameOf(state.A)) : '';
+    const rows = [
+      { c: 'var(--s1)', v: f1(D.A.ra[J - 1]), l: 'Ra' + nm },
+      { c: 'var(--s2)', v: f1(D.A.rs[J - 1]), l: 'Rs' + nm }
+    ];
+    if (D.B) {
+      const nb = ' · ' + esc(nameOf(state.B));
+      rows.push({ c: 'var(--s1)', v: f1(D.B.ra[J - 1]), l: 'Ra' + nb, dash: true }, { c: 'var(--s2)', v: f1(D.B.rs[J - 1]), l: 'Rs' + nb, dash: true });
+    }
+    showTip($('annualTip'), $('annualChart'), px, tipHtml(fechaTxt(J) + ' · día ' + J + ' · MJ m⁻² día⁻¹', rows));
+  }
+
+  function drawHourly() {
+    const box = $('hourlyChart');
+    const W = Math.max(300, Math.floor(box.clientWidth));
+    const Ht = W < 560 ? 250 : 290;
+    const m = { l: 52, r: 16, t: 24, b: 40 };
+    const pw = W - m.l - m.r, ph = Ht - m.t - m.b;
+    const YMAX = 1500;
+    const X = h => m.l + h / 24 * pw;
+    const Y = v => m.t + ph - (v / YMAX) * ph;
+    H.geo = { m: m, pw: pw, W: W };
+    const toW = arr => arr.map(v => v * W_PER_MJH);
+    const raA = toW(D.A.hra), rsA = toW(D.A.hrs), raB = D.B ? toW(D.B.hra) : null, rsB = D.B ? toW(D.B.hrs) : null;
+    let s = '<svg viewBox="0 0 ' + W + ' ' + Ht + '" width="' + W + '" height="' + Ht + '" role="img" aria-label="Radiación extraterrestre y solar global por hora para el día ' + state.J + '. Hay una tabla con los valores debajo.">';
+    for (let v = 0; v <= YMAX; v += 500) {
+      s += '<line class="' + (v === 0 ? 'base' : 'gl') + '" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + Y(v) + '" y2="' + Y(v) + '"/>';
+      s += '<text class="ax" x="' + (m.l - 8) + '" y="' + (Y(v) + 4) + '" text-anchor="end">' + v + '</text>';
+    }
+    s += '<text class="ax" x="' + m.l + '" y="12">W m⁻² (promedio de cada hora)</text>';
+    for (let h = 0; h <= 24; h += 3) {
+      s += '<line class="tick" x1="' + X(h) + '" x2="' + X(h) + '" y1="' + Y(0) + '" y2="' + (Y(0) + 4) + '"/>';
+      s += '<text class="ax" x="' + X(h) + '" y="' + (Y(0) + 18) + '" text-anchor="middle">' + h + '</text>';
+    }
+    s += '<text class="ax" x="' + (m.l + pw / 2) + '" y="' + (Ht - 4) + '" text-anchor="middle">Hora solar (el mediodía es la hora 12)</text>';
+    const fx = i => X(i + 0.5);
+    const ln = (arr, c, dash) => '<path d="' + lineD(arr, fx, Y) + '" fill="none" stroke="' + c + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"' + (dash ? ' stroke-dasharray="' + DASH + '"' : '') + '/>';
+    s += '<path d="' + lineD(rsA, fx, Y) + 'L' + X(23.5) + ' ' + Y(0) + 'L' + X(0.5) + ' ' + Y(0) + 'Z" fill="var(--s2)" opacity="0.12"/>';
+    s += ln(raA, 'var(--s1)') + ln(rsA, 'var(--s2)');
+    if (D.B) s += ln(raB, 'var(--s1)', true) + ln(rsB, 'var(--s2)', true);
+    if (!D.B) {
+      const iRa = raA.indexOf(Math.max.apply(null, raA)), iRs = rsA.indexOf(Math.max.apply(null, rsA));
+      if (raA[iRa] > 0) {
+        s += '<text class="ax" x="' + fx(iRa) + '" y="' + (Y(raA[iRa]) - 8) + '" text-anchor="middle" fill="var(--ink)">' + lab('a') + '</text>';
+        if (Y(rsA[iRs]) - Y(raA[iRa]) > 24) s += '<text class="ax" x="' + fx(iRs) + '" y="' + (Y(rsA[iRs]) - 8) + '" text-anchor="middle" fill="var(--ink)">' + lab('s') + '</text>';
+      }
+    }
+    if (H.hover !== null) {
+      const xh = fx(H.hover);
+      s += '<line x1="' + xh + '" x2="' + xh + '" y1="' + Y(YMAX) + '" y2="' + Y(0) + '" stroke="var(--muted)" stroke-width="1"/>';
+      const dot = (v, c, hollow) => hollow
+        ? '<circle cx="' + xh + '" cy="' + Y(v) + '" r="4" fill="var(--surface)" stroke="' + c + '" stroke-width="2.5"/>'
+        : '<circle cx="' + xh + '" cy="' + Y(v) + '" r="4" fill="' + c + '" stroke="var(--surface)" stroke-width="2"/>';
+      s += dot(raA[H.hover], 'var(--s1)') + dot(rsA[H.hover], 'var(--s2)');
+      if (D.B) s += dot(raB[H.hover], 'var(--s1)', true) + dot(rsB[H.hover], 'var(--s2)', true);
+    }
+    s += '</svg>';
+    box.innerHTML = s;
+  }
+
+  function hourlyTip(h, px) {
+    const nm = cmp() ? ' · ' + esc(nameOf(state.A)) : '';
+    const rows = [
+      { c: 'var(--s1)', v: f1(D.A.hra[h] * W_PER_MJH, 0), l: 'Ra' + nm },
+      { c: 'var(--s2)', v: f1(D.A.hrs[h] * W_PER_MJH, 0), l: 'Rs' + nm }
+    ];
+    if (D.B) {
+      const nb = ' · ' + esc(nameOf(state.B));
+      rows.push({ c: 'var(--s1)', v: f1(D.B.hra[h] * W_PER_MJH, 0), l: 'Ra' + nb, dash: true }, { c: 'var(--s2)', v: f1(D.B.hrs[h] * W_PER_MJH, 0), l: 'Rs' + nb, dash: true });
+    }
+    const pn = (c, tag) => {
+      const Nd = daylight(c.lat, state.J), sr = 12 - Nd / 2, ss = 12 + Nd / 2;
+      let msg = '';
+      if (h < sr && sr < h + 1) msg = 'el Sol sale a las ' + hhmm(sr);
+      else if (h < ss && ss < h + 1) msg = 'el Sol se pone a las ' + hhmm(ss);
+      return msg ? '<div class="p"><b>Hora parcial' + tag + ':</b> ' + msg + ' (hora solar), así que solo parte de esta hora recibe radiación y su promedio es menor.</div>' : '';
+    };
+    const extra = pn(state.A, cmp() ? ' · ' + esc(nameOf(state.A)) : '') + (state.B ? pn(state.B, ' · ' + esc(nameOf(state.B))) : '');
+    showTip($('hourlyTip'), $('hourlyChart'), px, tipHtml('Hora solar ' + h + ':00 a ' + (h + 1) + ':00 · W m⁻²', rows) + extra);
+  }
+
+  /* ---------- Mapa de Colombia ---------- */
+  const MG = { lon0: -79.3, lon1: -66.6, lat0: -4.7, lat1: 12.8, S: 24 };
+  const MK = Math.cos(rad(4)) * MG.S;
+  const mx = lon => (lon - MG.lon0) * MK, my = lat => (MG.lat1 - lat) * MG.S;
+  const MW = Math.round((MG.lon1 - MG.lon0) * MK), MH = Math.round((MG.lat1 - MG.lat0) * MG.S);
+  const COLPATH = COL.length ? 'M' + COL.map(p => mx(p[0]).toFixed(1) + ' ' + my(p[1]).toFixed(1)).join('L') + 'Z' : '';
+  const onMap = c => c.lon !== null && c.lon !== undefined && c.lon >= MG.lon0 && c.lon <= MG.lon1 && c.lat >= MG.lat0 && c.lat <= MG.lat1;
+
+  function drawMap() {
+    let s = '<svg viewBox="0 0 ' + MW + ' ' + MH + '" role="img" aria-label="Mapa de Colombia con la ubicación de las ciudades elegidas">';
+    s += '<path d="' + COLPATH + '" fill="var(--grid)" stroke="var(--axis)" stroke-width="1.2" stroke-linejoin="round"/>';
+    [[0, '0° ecuador'], [5, '5° N'], [10, '10° N']].forEach(p => {
+      s += '<line x1="0" x2="' + MW + '" y1="' + my(p[0]) + '" y2="' + my(p[0]) + '" stroke="var(--muted)" stroke-width="1" opacity="0.55"/>';
+      s += '<text class="ax-m" x="3" y="' + (my(p[0]) - 3) + '">' + p[1] + '</text>';
+    });
+    const cs = [['A', state.A, false], ['B', state.B, true]];
+    cs.forEach(e => {
+      const c = e[1]; if (!c || c.lat < MG.lat0 || c.lat > MG.lat1) return;
+      s += '<line x1="0" x2="' + MW + '" y1="' + my(c.lat) + '" y2="' + my(c.lat) + '" stroke="var(--ink)" stroke-width="1.4" opacity="0.7"' + (e[2] ? ' stroke-dasharray="5 4"' : '') + '/>';
+    });
+    const pts = [];
+    cs.forEach(e => {
+      const c = e[1]; if (!c || !onMap(c)) return;
+      pts.push({ k: e[0], c: c, x: mx(c.lon), y: my(c.lat) });
+    });
+    pts.forEach((p, i) => {
+      const near = pts.length === 2 && Math.abs(pts[0].x - pts[1].x) < 70 && Math.abs(pts[0].y - pts[1].y) < 18;
+      const flip = p.x > MW - 95;
+      let tx = p.x + (flip ? -12 : 12), ty = p.y + 4, an = flip ? 'end' : 'start';
+      if (near && i === 1) { ty = p.y + 22; tx = p.x; an = 'middle'; }
+      s += '<text class="ax" x="' + tx + '" y="' + ty + '" text-anchor="' + an + '" fill="var(--ink)" style="paint-order:stroke;stroke:var(--surface);stroke-width:3px;font-weight:600">' + esc(p.c.n) + '</text>';
+    });
+    pts.forEach(p => {
+      s += '<circle cx="' + p.x + '" cy="' + p.y + '" r="8" fill="var(--ink)" stroke="var(--surface)" stroke-width="2"/>';
+      s += '<text x="' + p.x + '" y="' + (p.y + 3.6) + '" text-anchor="middle" font-size="10" font-weight="700" fill="var(--surface)" font-family="system-ui,sans-serif">' + p.k + '</text>';
+    });
+    s += '</svg>';
+    $('mapBox').innerHTML = s;
+    let cap = '';
+    cs.forEach(e => {
+      const c = e[1]; if (!c) return;
+      let t = esc(nameOf(c)) + (c.n ? ' · ' + latTxt(c.lat) : '');
+      if (c.n && !onMap(c)) t += ' (fuera del mapa)';
+      cap += '<div><span class="bd">' + e[0] + '</span><span>' + t + '</span></div>';
+    });
+    cap += '<div style="margin-top:6px;display:block">Las líneas horizontales marcan la latitud de cada ciudad. Cerca del ecuador (0°) el Sol está alto todo el año.</div>';
+    $('mapCap').innerHTML = cap;
+  }
+
+  /* ---------- Escena: Sol, Tierra y suelo ---------- */
+  function drawScene() {
+    const box = $('sceneBox');
+    const narrow = box.clientWidth < 560;
+    const Lo = narrow
+      ? { W: 360, H: 650, sunR: 34, e: { x: 218, y: 172, R: 104 }, ins: { x: 8, y: 335, w: 344, h: 305 } }
+      : { W: 720, H: 400, sunR: 52, e: { x: 270, y: 200, R: 128 }, ins: { x: 432, y: 22, w: 272, h: 356 } };
+    const J = state.J, dD = deg(decl(J)), phi = state.A.lat;
+    const a = rad(phi - dD), th = Math.abs(phi - dD), t = rad(th), c = Math.cos(t), sn = Math.sin(t);
+    const e = Lo.e, ins = Lo.ins, dl = rad(dD);
+    const ux = -Math.sin(dl), uy = -Math.cos(dl), vx = Math.cos(dl), vy = -Math.sin(dl);   // eje (norte) y direccion de los paralelos
+    const px = e.x - e.R * Math.cos(a), py = e.y - e.R * Math.sin(a);
+    const nx = -Math.cos(a), ny = -Math.sin(a);
+    const name = nameOf(state.A);
+    let s = '<svg viewBox="0 0 ' + Lo.W + ' ' + Lo.H + '" role="img" aria-label="Vista lateral de la Tierra iluminada por el Sol y ampliación del suelo en ' + esc(name) + '">';
+    s += '<defs>' +
+      '<radialGradient id="gBg" cx="12%" cy="50%" r="90%"><stop offset="0" stop-color="#1e293b"/><stop offset="0.7" stop-color="#090d16"/></radialGradient>' +
+      '<radialGradient id="gGlow" cx="0" cy="' + e.y + '" r="' + (Lo.W * 0.42) + '" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fbbf24" stop-opacity="0.34"/><stop offset="1" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="gSun" cx="0.35" cy="0.5" r="0.7"><stop offset="0" stop-color="#fff3b0"/><stop offset="0.6" stop-color="#ffc233"/><stop offset="1" stop-color="#ff8a1f"/></radialGradient>' +
+      '<radialGradient id="gAtm" cx="' + e.x + '" cy="' + e.y + '" r="' + (e.R * 1.14) + '" gradientUnits="userSpaceOnUse"><stop offset="0.86" stop-color="#38bdf8" stop-opacity="0.28"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></radialGradient>' +
+      '<clipPath id="cIns"><rect x="' + ins.x + '" y="' + ins.y + '" width="' + ins.w + '" height="' + ins.h + '" rx="12"/></clipPath>' +
+      '</defs>';
+    s += '<rect width="' + Lo.W + '" height="' + Lo.H + '" rx="14" fill="url(#gBg)"/>';
+    // estrellas
+    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < 46; i++) s += '<circle cx="' + (rnd() * Lo.W).toFixed(0) + '" cy="' + (rnd() * Lo.H).toFixed(0) + '" r="' + (rnd() * 1.1 + 0.3).toFixed(1) + '" fill="#fff" opacity="' + (0.25 + rnd() * 0.55).toFixed(2) + '"/>';
+    // Sol
+    s += '<rect width="' + (Lo.W * 0.5) + '" height="' + Lo.H + '" fill="url(#gGlow)"/>';
+    s += '<circle cx="0" cy="' + e.y + '" r="' + Lo.sunR + '" fill="url(#gSun)"/>';
+    s += '<text class="sc" x="' + (Lo.sunR * 0.35) + '" y="' + (e.y + Lo.sunR + 20) + '">Sol</text>';
+    // rayos paralelos
+    const x0 = Lo.sunR + 12, xEnd = narrow ? Lo.W - 8 : ins.x - 12;
+    for (let k = -6; k <= 6; k++) {
+      const dy = k * e.R * 0.19, y = e.y + dy;
+      const hit = Math.abs(dy) < e.R ? e.x - Math.sqrt(e.R * e.R - dy * dy) : Math.min(e.x + e.R + 8, xEnd);
+      s += '<line class="ray" x1="' + x0 + '" y1="' + y + '" x2="' + hit + '" y2="' + y + '" stroke="#fbbf24" stroke-opacity="0.3" stroke-width="1.3"/>';
+    }
+    if (!narrow) s += '<text class="sc sc2" x="' + (x0 + 6) + '" y="' + (e.y - e.R * 1.2 - 4) + '">Rayos del Sol, paralelos</text>';
+    // Tierra
+    s += '<circle cx="' + e.x + '" cy="' + e.y + '" r="' + (e.R * 1.14) + '" fill="url(#gAtm)"/>';
+    s += '<circle cx="' + e.x + '" cy="' + e.y + '" r="' + e.R + '" fill="#1d4ed8"/>';
+    s += '<path d="M' + e.x + ' ' + (e.y - e.R) + 'A' + e.R + ' ' + e.R + ' 0 0 1 ' + e.x + ' ' + (e.y + e.R) + 'Z" fill="#020617" opacity="0.68"/>';
+    // paralelos (se ven de canto, perpendiculares al eje)
+    const chord = l => { const q = rad(l), cx0 = e.x + ux * e.R * Math.sin(q), cy0 = e.y + uy * e.R * Math.sin(q), h = e.R * Math.cos(q); return [cx0 - vx * h, cy0 - vy * h, cx0 + vx * h, cy0 + vy * h]; };
+    [-23.45, 23.45].forEach(l => { const q = chord(l); s += '<line x1="' + q[0] + '" y1="' + q[1] + '" x2="' + q[2] + '" y2="' + q[3] + '" stroke="#fff" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3 3"/>'; });
+    const eq = chord(0);
+    s += '<line x1="' + eq[0] + '" y1="' + eq[1] + '" x2="' + eq[2] + '" y2="' + eq[3] + '" stroke="#fff" stroke-opacity="0.7" stroke-width="1.6"/>';
+    s += '<text class="sc sc2" x="' + (eq[2] - 6) + '" y="' + (eq[3] - 5) + '" text-anchor="end">Ecuador</text>';
+    const pc = chord(phi);
+    s += '<line x1="' + pc[0] + '" y1="' + pc[1] + '" x2="' + pc[2] + '" y2="' + pc[3] + '" stroke="#fde047" stroke-opacity="0.9" stroke-width="2"/>';
+    // eje
+    s += '<line x1="' + (e.x - ux * e.R * 1.24) + '" y1="' + (e.y - uy * e.R * 1.24) + '" x2="' + (e.x + ux * e.R * 1.24) + '" y2="' + (e.y + uy * e.R * 1.24) + '" stroke="#f8fafc" stroke-opacity="0.55" stroke-width="1.5" stroke-dasharray="4 4"/>';
+    s += '<text class="sc sc2" x="' + (e.x + ux * e.R * 1.33) + '" y="' + (e.y + uy * e.R * 1.33 + 4) + '" text-anchor="middle">N</text>';
+    s += '<text class="sc sc2" x="' + (e.x - ux * e.R * 1.33) + '" y="' + (e.y - uy * e.R * 1.33 + 4) + '" text-anchor="middle">S</text>';
+    // haz que llega a la ciudad, sobre la superficie curva
+    const bw = 11, yTop = clamp(py - bw, e.y - e.R * 0.96, e.y + e.R * 0.96), yBot = clamp(py + bw, e.y - e.R * 0.96, e.y + e.R * 0.96);
+    const xT = e.x - Math.sqrt(e.R * e.R - (yTop - e.y) * (yTop - e.y)), xB = e.x - Math.sqrt(e.R * e.R - (yBot - e.y) * (yBot - e.y));
+    s += '<path d="M' + x0 + ' ' + yTop + 'L' + xT + ' ' + yTop + 'A' + e.R + ' ' + e.R + ' 0 0 0 ' + xB + ' ' + yBot + 'L' + x0 + ' ' + yBot + 'Z" fill="#f59e0b" opacity="0.32"/>';
+    s += '<line x1="' + x0 + '" y1="' + yTop + '" x2="' + xT + '" y2="' + yTop + '" stroke="#f59e0b" stroke-width="1.6"/><line x1="' + x0 + '" y1="' + yBot + '" x2="' + xB + '" y2="' + yBot + '" stroke="#f59e0b" stroke-width="1.6"/>';
+    s += '<path d="M' + xT + ' ' + yTop + 'A' + e.R + ' ' + e.R + ' 0 0 0 ' + xB + ' ' + yBot + '" fill="none" stroke="#fde047" stroke-width="4" stroke-linecap="round"/>';
+    // normal local, angulo cenital
+    const nl = 52;
+    s += '<line x1="' + px + '" y1="' + py + '" x2="' + (px + nx * nl) + '" y2="' + (py + ny * nl) + '" stroke="#38bdf8" stroke-width="1.8"/>';
+    s += '<line x1="' + px + '" y1="' + py + '" x2="' + (px - nl) + '" y2="' + py + '" stroke="#f59e0b" stroke-width="1.3" stroke-dasharray="3 3"/>';
+    if (th > 2) {
+      const r1 = 28, sw = a > 0 ? 1 : 0;
+      const sx = px - r1, sy = py, ex = px + nx * r1, ey = py + ny * r1;
+      s += '<path d="M' + sx + ' ' + sy + 'A' + r1 + ' ' + r1 + ' 0 0 ' + (a > 0 ? 0 : 1) + ' ' + ex + ' ' + ey + '" fill="none" stroke="#38bdf8" stroke-width="1.6"/>';
+      s += '<text class="sc" x="' + (px + (-1 + nx) * (r1 + 10) / 2 - 16) + '" y="' + (py + (ny) * (r1 + 10) / 2 + (a > 0 ? -2 : 12)) + '" fill="#7dd3fc">θz</text>';
+    }
+    // punto de la ciudad y punto subsolar
+    s += '<circle cx="' + px + '" cy="' + py + '" r="5" fill="#fff" stroke="#0f172a" stroke-width="1.5"/>';
+    s += '<circle cx="' + px + '" cy="' + py + '" r="11" fill="none" stroke="#fff" stroke-width="1.5"/>';
+    s += '<circle cx="' + (e.x - e.R) + '" cy="' + e.y + '" r="3.5" fill="#fde047"/>';
+    s += '<text class="sc" x="' + (px + 16) + '" y="' + (py + 4) + '">' + esc(name) + (state.A.n ? ' · ' + latTxt(phi) : '') + '</text>';
+    s += '<text class="sc sc2" x="' + (e.x - e.R + 10) + '" y="' + (e.y + (a >= 0 ? 24 : -14)) + '">Sol vertical (δ = ' + (dD >= 0 ? '+' : '−') + f1(Math.abs(dD)) + '°)</text>';
+    s += '<text class="sc sc2" x="' + e.x + '" y="' + (e.y + e.R + 26) + '" text-anchor="middle">Tierra vista de lado, mediodía solar</text>';
+    // recuadro: zoom al suelo (plano)
+    const gy = ins.y + ins.h - 54, w = 18, f = w / Math.max(c, 0.05);
+    let Lb = Math.min(200, (gy - (ins.y + 64)) / Math.max(c, 0.05), (ins.w - 28 - f) / Math.max(sn, 0.05));
+    Lb = Math.max(Lb, 60);
+    const total = f + sn * Lb, xl = ins.x + ins.w / 2 - total / 2, ty = gy - c * Lb, g1 = xl + sn * Lb, g2 = g1 + f, fc = (g1 + g2) / 2;
+    s += '<rect x="' + ins.x + '" y="' + ins.y + '" width="' + ins.w + '" height="' + ins.h + '" rx="12" fill="#0f172a" stroke="#475569" stroke-width="1.2"/>';
+    s += '<g clip-path="url(#cIns)">';
+    s += '<rect x="' + ins.x + '" y="' + gy + '" width="' + ins.w + '" height="60" fill="#6b4a2f"/><rect x="' + ins.x + '" y="' + gy + '" width="' + ins.w + '" height="5" fill="#4f9a3c"/>';
+    for (let x = ins.x + 22; x < ins.x + ins.w - 10; x += 38) {
+      s += '<path d="M' + x + ' ' + gy + 'L' + x + ' ' + (gy - 14) + '" stroke="#5fbf4a" stroke-width="2"/>' +
+        '<path d="M' + x + ' ' + (gy - 7) + 'q-9 -1 -10 -9 q8 0 10 9z" fill="#5fbf4a"/><path d="M' + x + ' ' + (gy - 10) + 'q9 -1 10 -9 q-8 0 -10 9z" fill="#5fbf4a"/>';
+    }
+    s += '</g>';
+    s += '<polygon points="' + xl + ',' + ty + ' ' + (xl + f) + ',' + ty + ' ' + g2 + ',' + gy + ' ' + g1 + ',' + gy + '" fill="#f59e0b" opacity="0.3"/>';
+    s += '<line x1="' + xl + '" y1="' + ty + '" x2="' + g1 + '" y2="' + gy + '" stroke="#f59e0b" stroke-width="1.6"/><line x1="' + (xl + f) + '" y1="' + ty + '" x2="' + g2 + '" y2="' + gy + '" stroke="#f59e0b" stroke-width="1.6"/>';
+    s += '<line x1="' + g1 + '" y1="' + (gy - 1) + '" x2="' + g2 + '" y2="' + (gy - 1) + '" stroke="#fde047" stroke-width="5" stroke-linecap="round"/>';
+    // ancho perpendicular del haz (w)
+    const m1x = (xl + g1) / 2, m1y = (ty + gy) / 2, ncx = c, ncy = -sn;
+    s += '<line x1="' + m1x + '" y1="' + m1y + '" x2="' + (m1x + w * ncx) + '" y2="' + (m1y + w * ncy) + '" stroke="#fff" stroke-width="2.2"/>';
+    s += '<text class="sc" x="' + (m1x + w * ncx / 2 + 10) + '" y="' + (m1y + w * ncy / 2 - 6) + '">w</text>';
+    // vertical y angulo cenital en el suelo
+    s += '<line x1="' + fc + '" y1="' + gy + '" x2="' + fc + '" y2="' + (gy - 62) + '" stroke="#38bdf8" stroke-width="1.6"/>';
+    s += '<line x1="' + fc + '" y1="' + gy + '" x2="' + (fc - sn * 62) + '" y2="' + (gy - c * 62) + '" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3 3"/>';
+    if (th > 2) {
+      const r2 = 36;
+      s += '<path d="M' + fc + ' ' + (gy - r2) + 'A' + r2 + ' ' + r2 + ' 0 0 0 ' + (fc - sn * r2) + ' ' + (gy - c * r2) + '" fill="none" stroke="#38bdf8" stroke-width="1.6"/>';
+      s += '<text class="sc" x="' + (fc - sn * (r2 + 12) / 1.6 - 8) + '" y="' + (gy - c * (r2 + 8) - 2) + '" fill="#7dd3fc">θz</text>';
+    }
+    s += '<circle cx="' + (fc - sn * (Lb + 14)) + '" cy="' + (gy - c * (Lb + 14)) + '" r="8" fill="url(#gSun)"/>';
+    s += '<text class="sc" x="' + (ins.x + 12) + '" y="' + (ins.y + 22) + '">Zoom al suelo de ' + esc(state.A.n || 'la latitud elegida') + '</text>';
+    s += '<text class="sc" x="' + (ins.x + ins.w / 2) + '" y="' + (gy + 36) + '" text-anchor="middle">superficie iluminada = w / cos θz</text>';
+    s += '</svg>';
+    box.innerHTML = s;
+    $('lanternText').textContent = 'Mediodía solar en ' + name + ': el Sol está a θz = ' + f1(th) + '° de la vertical (θz = |φ − δ|). La misma luz se reparte sobre ' +
+      f1(1 / Math.max(c, 0.05), 2) + ' veces más superficie, así que cada metro cuadrado recibe el ' + f1(c * 100, 0) + ' % de la energía de un rayo perpendicular.';
+  }
+
+  /* ---------- Datos del día (tarjetas) ---------- */
+  const SM = ' <small>MJ m⁻² día⁻¹</small>';
+  const TILES = [
+    { k: 'fecha', l: 'Fecha', shared: true },
+    { k: 'decl', l: 'Declinación solar (δ)', shared: true },
+    { k: 'N', l: 'Duración del día (<i>N</i>)' },
+    { k: 'zen', l: 'Ángulo cenital al mediodía (θz)' },
+    { k: 'irr', l: 'Irradiancia al mediodía (tope de la atmósfera)' },
+    { k: 'exp', l: 'Expansión del haz (1 / cos θz)' },
+    { k: 'ra', l: '<i>R</i><sub>a</sub> del día' },
+    { k: 'rs', l: '<i>R</i><sub>s</sub> del día' },
+    { k: 'rso', l: '<i>R</i><sub>so</sub> del día (cielo despejado)' },
+    { k: 'par', l: 'PAR aproximada (45 a 50 % de <i>R</i><sub>s</sub>)' },
+    { k: 'range', l: '<i>R</i><sub>a</sub> a lo largo del año' }
+  ];
+  (function buildTiles() {
+    const host = $('tiles');
+    TILES.forEach(t => {
+      const d = document.createElement('div'); d.className = 'tile';
+      d.innerHTML = '<p class="l">' + t.l + '</p>' + (t.shared
+        ? '<p class="v" id="t_' + t.k + '"></p><p class="s" id="t_' + t.k + 's"></p>'
+        : '<div class="row"><span class="bd">A</span><p class="v" id="t_' + t.k + '_a"></p></div><p class="s" id="t_' + t.k + '_as"></p>' +
+          '<div class="row cb"><span class="bd">B</span><p class="v" id="t_' + t.k + '_b"></p></div><p class="s cb" id="t_' + t.k + '_bs"></p>');
+      host.appendChild(d);
+    });
+  })();
+
+  function metrics(c, ser) {
+    const J = state.J, d = decl(J), N = daylight(c.lat, J), zen = Math.abs(c.lat - deg(d)), cz = Math.max(Math.cos(rad(zen)), 0.05);
+    const ra = ser.ra[J - 1], rs = ser.rs[J - 1];
+    const rso = (0.75 + 2e-5 * c.z) * ra;
+    return {
+      N: [f1(N) + ' <small>h</small>', 'Sol sale ' + hhmm(12 - N / 2) + ' y se pone ' + hhmm(12 + N / 2) + ' (hora solar)'],
+      zen: [f1(zen) + '°', 'θz = |φ − δ|. Menor ángulo, más energía por m²'],
+      irr: [f1(GSC_W * dr(J) * Math.cos(rad(zen)), 0) + ' <small>W/m²</small>', 'Gsc · dr · cos θz, sobre una superficie horizontal'],
+      exp: [f1(1 / cz, 2) + '×', 'Cada m² recibe el ' + f1(Math.cos(rad(zen)) * 100, 0) + ' % de un rayo perpendicular'],
+      ra: [f1(ra) + SM, 'Techo astronómico del día'],
+      rs: [f1(rs) + SM, 'Equivale a ' + f1(rs * 0.408) + ' mm/día de agua evaporable (0.408 × Rs). ' + f1(rs / ra * 100, 0) + ' % de Ra, con n = ' + f1(state.nN * N) + ' h de brillo'],
+      rso: [f1(rso) + SM, 'Cielo despejado a z = ' + Math.round(c.z) + ' m. Rs/Rso = ' + f1(rs / rso, 2)],
+      par: [f1(rs * 0.45) + ' a ' + f1(rs * 0.50) + SM, 'Luz útil para la fotosíntesis'],
+      range: [f1(ser.min) + ' a ' + f1(ser.max) + SM, 'El mínimo es ' + f1((ser.max - ser.min) / ser.max * 100, 0) + ' % menor que el máximo']
+    };
+  }
+
+  function updateTiles() {
+    const J = state.J, dDeg = deg(decl(J));
+    $('t_fecha').textContent = fechaTxt(J);
+    $('t_fechas').textContent = 'Día ' + J + ' del año';
+    $('t_decl').textContent = (dDeg >= 0 ? '+' : '−') + f1(Math.abs(dDeg)) + '°';
+    $('t_decls').textContent = 'Latitud donde el Sol cae vertical al mediodía';
+    const mA = metrics(state.A, D.A), mB = state.B ? metrics(state.B, D.B) : null;
+    TILES.forEach(t => {
+      if (t.shared) return;
+      $('t_' + t.k + '_a').innerHTML = mA[t.k][0];
+      $('t_' + t.k + '_as').textContent = mA[t.k][1];
+      if (mB) { $('t_' + t.k + '_b').innerHTML = mB[t.k][0]; $('t_' + t.k + '_bs').textContent = mB[t.k][1]; }
+    });
+    $('tiles').classList.toggle('cmp', cmp());
+  }
+
+  /* ---------- Tablas ---------- */
+  function buildTables() {
+    const nA = esc(nameOf(state.A)), nB = state.B ? esc(nameOf(state.B)) : '';
+    let a = '<thead><tr><th>Mes</th><th>Día del año</th><th>Ra · ' + nA + '</th><th>Rs · ' + nA + '</th>' + (D.B ? '<th>Ra · ' + nB + '</th><th>Rs · ' + nB + '</th>' : '') + '</tr></thead><tbody>';
+    for (let i = 0; i < 12; i++) {
+      const J = CUM[i] + 15;
+      a += '<tr><td>15 de ' + MES[i] + '</td><td>' + J + '</td><td>' + f1(D.A.ra[J - 1]) + '</td><td>' + f1(D.A.rs[J - 1]) + '</td>' +
+        (D.B ? '<td>' + f1(D.B.ra[J - 1]) + '</td><td>' + f1(D.B.rs[J - 1]) + '</td>' : '') + '</tr>';
+    }
+    $('annualTable').innerHTML = a + '</tbody><caption class="sr" style="caption-side:bottom;text-align:left;color:var(--ink2);padding-top:6px">Valores en MJ m⁻² día⁻¹</caption>';
+    let h = '<thead><tr><th>Hora solar</th><th>Ra · ' + nA + ' (W m⁻²)</th><th>Rs · ' + nA + ' (W m⁻²)</th>' + (D.B ? '<th>Ra · ' + nB + ' (W m⁻²)</th><th>Rs · ' + nB + ' (W m⁻²)</th>' : '') + '</tr></thead><tbody>';
+    for (let i = 0; i < 24; i++) {
+      h += '<tr><td>' + i + ':00 a ' + (i + 1) + ':00</td><td>' + f1(D.A.hra[i] * W_PER_MJH, 0) + '</td><td>' + f1(D.A.hrs[i] * W_PER_MJH, 0) + '</td>' +
+        (D.B ? '<td>' + f1(D.B.hra[i] * W_PER_MJH, 0) + '</td><td>' + f1(D.B.hrs[i] * W_PER_MJH, 0) + '</td>' : '') + '</tr>';
+    }
+    $('hourlyTable').innerHTML = h + '</tbody>';
+  }
+
+  /* ---------- Actualización general ---------- */
+  function updateAll() {
+    compute();
+    const J = state.J;
+    $('latOut').textContent = latTxt(state.A.lat);
+    $('dayOut').textContent = fechaTxt(J) + ' (día ' + J + ')';
+    const Nday = daylight(state.A.lat, J);
+    $('nnOut').textContent = f1(state.nN, 2) + ' (n ≈ ' + f1(state.nN * Nday) + ' h de ' + f1(Nday) + ' h)';
+    $('nn').value = state.nN; $('lat').value = state.A.lat; $('alt').value = state.A.z; $('day').value = J;
+    $('altOut').textContent = Math.round(state.A.z) + ' m';
+    document.querySelectorAll('#presets button').forEach(b => b.setAttribute('aria-pressed', Math.abs(parseFloat(b.dataset.nn) - state.nN) < 0.005 ? 'true' : 'false'));
+    $('citySel').value = state.A.n || '__custom';
+    $('cityB').value = state.B ? state.B.n : '';
+
+    const who = cmp() ? esc(nameOf(state.A)) + ' (A) y ' + esc(nameOf(state.B)) + ' (B)' : esc(nameOf(state.A)) + ' (' + latTxt(state.A.lat) + ')';
+    $('annualSub').innerHTML = 'Cada punto es el total de un día, para ' + who + ', con brillo solar fijo n/N = ' + f1(state.nN, 2) + '. La línea vertical marca el día elegido. El eje vertical es fijo para poder comparar.';
+    $('hourlySub').innerHTML = fechaTxt(J) + ' (día ' + J + '), ' + who + '. Cada punto es la energía promedio de una hora, en hora solar.';
+    $('annualLegend').innerHTML = legendHtml('<i>R</i><sub>a</sub> radiación extraterrestre (techo astronómico)', '<i>R</i><sub>s</sub> radiación solar global estimada');
+    $('hourlyLegend').innerHTML = legendHtml('<i>R</i><sub>a</sub> horaria (exacta, ecuación 28 de la FAO)', '<i>R</i><sub>s</sub> horaria estimada (aproximación)');
+
+    updateTiles();
+    drawMap();
+    drawScene();
+    drawAnnual();
+    drawHourly();
+    buildTables();
+  }
+
+  /* ---------- Controles ---------- */
+  fillSelect($('citySel'), false);
+  fillSelect($('cityB'), true);
+  const findCity = n => CITIES.find(c => c.n === n);
+  $('citySel').addEventListener('change', e => {
+    const c = findCity(e.target.value);
+    if (c) { state.A = cityObj(c); updateAll(); }
+  });
+  $('cityB').addEventListener('change', e => {
+    const c = findCity(e.target.value);
+    state.B = c ? cityObj(c) : null;
+    updateAll();
+  });
+  $('lat').addEventListener('input', e => { state.A = { n: null, lat: parseFloat(e.target.value), lon: null, z: state.A.z }; updateAll(); });
+  $('alt').addEventListener('input', e => { state.A.z = parseFloat(e.target.value); updateAll(); });
+  document.querySelectorAll('#presets button').forEach(b => b.addEventListener('click', () => { state.nN = parseFloat(b.dataset.nn); updateAll(); }));
+  $('day').addEventListener('input', e => { state.J = parseInt(e.target.value, 10); updateAll(); });
+  $('nn').addEventListener('input', e => { state.nN = parseFloat(e.target.value); updateAll(); });
+  function setDay(J) { state.J = clamp(J, 1, 365); $('day').value = state.J; updateAll(); }
+
+  /* ---------- Tema claro / oscuro ---------- */
+  const root = document.documentElement;
+  const effTheme = () => root.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const paintTheme = () => { $('themeBtn').textContent = effTheme() === 'dark' ? '☀ Modo claro' : '☾ Modo oscuro'; };
+  try { const saved = localStorage.getItem('tema1-theme'); if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved); } catch (err) { /* sin almacenamiento */ }
+  paintTheme();
+  $('themeBtn').addEventListener('click', () => {
+    const next = effTheme() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('tema1-theme', next); } catch (err) { /* sin almacenamiento */ }
+    paintTheme();
+  });
+
+  /* ---------- Cargar escenarios del taller en el laboratorio ---------- */
+  function loadScenario(o) {
+    if (o.a) { const c = findCity(o.a); if (c) state.A = cityObj(c); }
+    else if (o.lat !== undefined) state.A = { n: null, lat: o.lat, lon: null, z: o.z || 0 };
+    const cb = o.b ? findCity(o.b) : null;
+    state.B = cb ? cityObj(cb) : null;
+    if (o.j) state.J = o.j;
+    if (o.nn !== undefined) state.nN = o.nn;
+    updateAll();
+    $('controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.querySelectorAll('[data-load]').forEach(b => b.addEventListener('click', () => {
+    try { loadScenario(JSON.parse(b.getAttribute('data-load'))); } catch (err) { /* escenario inválido */ }
+  }));
+
+  /* ---------- Retos con verificación ---------- */
+  const num = id => { const v = parseFloat(String($(id).value).replace(',', '.')); return isFinite(v) ? v : null; };
+  function feedback(k, ok, msg) { const el = $('fb' + k); el.className = 'fb ' + (ok ? 'ok' : 'bad'); el.textContent = (ok ? '✓ ' : '✗ ') + msg; }
+  function checkReto(k) {
+    const v = num('r' + k);
+    if (v === null) { const el = $('fb' + k); el.className = 'fb'; el.textContent = 'Escribe un número y pulsa Verificar.'; return; }
+    if (k === 1) {
+      const a = 19.54;
+      if (Math.abs(v - a) <= 0.35) feedback(1, true, 'Correcto. Rs ≈ 19.5 MJ m⁻² día⁻¹ (N = 11.69 h, n/N = 0.633, Ra = 34.49).');
+      else if (v > 25) feedback(1, false, 'Es demasiado alto. ¿Usaste Ra en lugar de Rs, o te faltó el factor (as + bs · n/N)? En febrero y a esta latitud Ra ronda 34.5.');
+      else if (v < 10) feedback(1, false, 'Es demasiado bajo. Revisa que n/N sea n dividido entre N (cerca de 0.63) y que uses bs = 0.50.');
+      else if (Math.abs(v - a) <= 1.5) feedback(1, false, 'Estás muy cerca. Revisa los decimales intermedios (usa 4 decimales) y que N salga de la ecuación 34.');
+      else feedback(1, false, 'Revisa N (cerca de 11.7 h), n/N y Ra (cerca de 34.5). ¿La calculadora está en radianes?');
+    } else if (k === 2) {
+      const a = 7.97, own = num('r1');
+      if (Math.abs(v - a) <= 0.2) feedback(2, true, 'Correcto. 0.408 × 19.5 ≈ 8.0 mm día⁻¹, unos 80 m³ ha⁻¹ día⁻¹. Es un techo energético: la evapotranspiración real de la palma es menor.');
+      else if (own !== null && Math.abs(v - 0.408 * own) <= 0.2) feedback(2, true, 'Tu conversión es correcta (0.408 × tu Rs). Pero tu Rs del Reto 1 no coincide con la esperada (cerca de 19.5): revisa el Reto 1.');
+      else if (v > 15) feedback(2, false, 'Parece que dejaste el valor en MJ. Multiplica Rs por 0.408 para pasar a mm día⁻¹.');
+      else feedback(2, false, 'Multiplica Rs por 0.408 (que es 1/λ, con λ = 2.45 MJ kg⁻¹). Si el Reto 1 no te cuadró, corrígelo primero.');
+    } else {
+      const a = 8.24;
+      if (Math.abs(v - a) <= 0.35) feedback(3, true, 'Correcto. n ≈ 8.2 h (Ra = 36.43, Rs/Ra = 0.590, n/N = 0.680, N = 12.12 h).');
+      else if (v < 1.2) feedback(3, false, 'Parece que diste n/N. Multiplícalo por N (cerca de 12.1 h) para obtener horas.');
+      else if (v > 13) feedback(3, false, 'Las horas de brillo no pueden superar N (cerca de 12.1 h). Revisa el despeje.');
+      else if (Math.abs(v - a) <= 1.5) feedback(3, false, 'Estás cerca. Revisa los decimales intermedios y el valor de Ra (cerca de 36.4).');
+      else feedback(3, false, 'Despeja n/N = (Rs/Ra − as)/bs y luego n = (n/N) · N. Ra a esta latitud el 15 de agosto ronda 36.4.');
+    }
+  }
+  document.querySelectorAll('[data-check]').forEach(b => b.addEventListener('click', () => checkReto(parseInt(b.dataset.check, 10))));
+  [1, 2, 3].forEach(k => $('r' + k).addEventListener('keydown', e => { if (e.key === 'Enter') checkReto(k); }));
+
+  /* ---------- Interacción con los gráficos ---------- */
+  const aBox = $('annualChart'), hBox = $('hourlyChart');
+  let dragging = false;
+  const jFromEvent = e => {
+    const r = aBox.getBoundingClientRect(), g = A.geo;
+    return clamp(Math.round(1 + (e.clientX - r.left - g.m.l) / g.pw * 364), 1, 365);
+  };
+  aBox.addEventListener('pointerdown', e => { dragging = true; aBox.setPointerCapture(e.pointerId); setDay(jFromEvent(e)); });
+  aBox.addEventListener('pointerup', () => { dragging = false; });
+  aBox.addEventListener('pointercancel', () => { dragging = false; });
+  aBox.addEventListener('pointermove', e => {
+    const J = jFromEvent(e), r = aBox.getBoundingClientRect();
+    A.hover = J;
+    if (dragging) { setDay(J); } else { drawAnnual(); }
+    annualTip(J, e.clientX - r.left);
+  });
+  aBox.addEventListener('pointerleave', () => { if (dragging) return; A.hover = null; $('annualTip').hidden = true; drawAnnual(); });
+
+  const hFromEvent = e => {
+    const r = hBox.getBoundingClientRect(), g = H.geo;
+    return clamp(Math.floor((e.clientX - r.left - g.m.l) / g.pw * 24), 0, 23);
+  };
+  hBox.addEventListener('pointermove', e => {
+    const h = hFromEvent(e), r = hBox.getBoundingClientRect();
+    H.hover = h; drawHourly();
+    hourlyTip(h, e.clientX - r.left);
+  });
+  hBox.addEventListener('pointerleave', () => { H.hover = null; $('hourlyTip').hidden = true; drawHourly(); });
+
+  /* ---------- Arranque ---------- */
+  let rz = 0;
+  const onResize = () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { drawAnnual(); drawHourly(); drawScene(); }); };
+  if (window.ResizeObserver) { new ResizeObserver(onResize).observe(aBox); new ResizeObserver(onResize).observe(hBox); new ResizeObserver(onResize).observe($('sceneBox')); } else { window.addEventListener('resize', onResize); }
+  updateAll();
+})();
+</script>
+<script>
+/* Resalta en la barra de navegación la sección que se está leyendo */
+(function () {
+  var links = document.querySelectorAll('.topnav .links a'), map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      links.forEach(function (a) { a.removeAttribute('aria-current'); });
+      var a = map[e.target.id]; if (a) a.setAttribute('aria-current', 'true');
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+})();
+</script>
+</body>
+</html>

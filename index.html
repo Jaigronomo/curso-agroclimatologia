@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Curso interactivo de Agroclimatología para estudiantes de Agronomía: radiación, temperatura, agua, balance hídrico, zonificación y gestión del riesgo climático.">
+<title>Agroclimatología · Curso interactivo</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --s1: #2a78d6; --s2: #eb6834; --s3: #2f855a; --link: #256abf;
+  --border: rgba(11, 11, 11, 0.10);
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --s1: #3987e5; --s2: #d95926; --s3: #3aa573; --link: #6da7ec;
+    --border: rgba(255, 255, 255, 0.10);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --s1: #3987e5; --s2: #d95926; --s3: #3aa573; --link: #6da7ec;
+  --border: rgba(255, 255, 255, 0.10);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+@media (max-width: 640px) { html { scroll-padding-top: 108px; } }
+body { margin: 0; background: var(--page); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.6; font-size: 17px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+a { color: var(--link); }
+p { margin: 0 0 12px; }
+sub { line-height: 0; }
+h1, h2, h3 { font-family: Georgia, 'Times New Roman', serif; }
+
+/* Navegación */
+.topnav { position: sticky; top: 0; z-index: 30; background: rgba(249, 249, 247, 0.85); -webkit-backdrop-filter: saturate(160%) blur(12px); backdrop-filter: saturate(160%) blur(12px); border-bottom: 1px solid var(--border); }
+@supports (background: color-mix(in srgb, red, blue)) { .topnav { background: color-mix(in srgb, var(--page) 82%, transparent); } }
+.topnav-in { max-width: 1040px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 8px 18px; flex-wrap: wrap; }
+.brand { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.links { display: flex; gap: 2px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.links::-webkit-scrollbar { display: none; }
+.links a { font-size: .88rem; color: var(--ink2); text-decoration: none; padding: 5px 11px; border-radius: 999px; white-space: nowrap; }
+.links a:hover { background: var(--grid); color: var(--ink); }
+.links a[aria-current="true"] { background: var(--ink); color: var(--surface); }
+.themebtn { font: inherit; font-size: .82rem; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--axis); background: transparent; color: var(--ink); cursor: pointer; }
+.themebtn:hover { background: var(--grid); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+@media (max-width: 640px) { .brand { order: 1; flex: 1; } .themebtn { order: 2; } .links { order: 3; flex: 0 0 100%; } }
+
+/* Hero */
+.hero { padding: 64px 0 28px; }
+.kicker { display: inline-block; margin: 0 0 16px; padding: 5px 14px; border-radius: 999px; background: var(--grid); color: var(--ink2); font-size: .8rem; font-weight: 650; letter-spacing: .04em; }
+@supports (background: color-mix(in srgb, red, blue)) { .kicker { background: color-mix(in srgb, var(--s1) 13%, transparent); color: var(--link); } }
+h1 { font-size: clamp(2.4rem, 6vw, 3.8rem); line-height: 1.08; letter-spacing: -0.015em; margin: 0 0 16px; font-weight: 700; }
+.lead { font-size: 1.2rem; color: var(--ink2); max-width: 40em; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 0; }
+.btn-primary, .btn-ghost { display: inline-block; font-size: .98rem; font-weight: 600; padding: 11px 22px; border-radius: 999px; text-decoration: none; }
+.btn-primary { background: var(--ink); color: var(--surface); border: 1px solid var(--ink); }
+.btn-primary:hover { opacity: .88; }
+.btn-ghost { color: var(--ink); border: 1px solid var(--axis); }
+.btn-ghost:hover { background: var(--grid); }
+.stats { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 34px 0 0; padding: 0; list-style: none; color: var(--ink2); font-size: .92rem; }
+.stats strong { display: block; font-family: Georgia, 'Times New Roman', serif; font-size: 1.7rem; color: var(--ink); line-height: 1.1; }
+
+/* Secciones */
+section { padding-top: 12px; }
+h2 { font-size: 1.7rem; line-height: 1.2; margin: 52px 0 8px; font-weight: 700; }
+.sec-lead { color: var(--ink2); max-width: 44em; margin-bottom: 18px; }
+.grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .grid.c3 { grid-template-columns: repeat(3, 1fr); } .grid.c2 { grid-template-columns: repeat(2, 1fr); } }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; min-width: 0; }
+.card h3 { margin: 0 0 6px; font-size: 1.12rem; line-height: 1.3; }
+.card p { margin: 0; color: var(--ink2); font-size: .95rem; }
+.ico { font-size: 1.5rem; line-height: 1; display: block; margin-bottom: 10px; }
+
+.topic { display: flex; flex-direction: column; gap: 8px; }
+.topic .tag { align-self: flex-start; font-size: .72rem; font-weight: 700; letter-spacing: .08em; padding: 3px 10px; border-radius: 999px; background: var(--grid); color: var(--ink2); }
+.topic.live { border-left: 4px solid var(--s3); }
+.topic.live .tag { background: var(--s3); color: #fff; }
+.topic .go { margin-top: auto; padding-top: 6px; font-weight: 600; }
+.topic.soon { opacity: .78; }
+
+.cuts { counter-reset: cut; }
+.cut { position: relative; padding-top: 34px; }
+.cut::before { counter-increment: cut; content: "Corte " counter(cut); position: absolute; top: 14px; left: 22px; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--link); }
+
+details.mod { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 14px; }
+details.mod > summary { cursor: pointer; list-style: none; padding: 16px 22px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+details.mod > summary::-webkit-details-marker { display: none; }
+details.mod > summary::before { content: "▸"; color: var(--ink2); transition: transform .15s; }
+details.mod[open] > summary::before { transform: rotate(90deg); }
+details.mod .mt { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 1.15rem; }
+details.mod .mw { color: var(--ink2); font-size: .88rem; }
+.modbody { padding: 0 22px 18px; }
+.modbody p { color: var(--ink2); font-size: .95rem; max-width: 48em; }
+.tscroll { overflow-x: auto; margin-top: 8px; }
+table { border-collapse: collapse; width: 100%; min-width: 700px; font-size: .9rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 10px; border-bottom: 1px solid var(--grid); }
+th { color: var(--ink2); font-weight: 600; white-space: nowrap; }
+td:first-child, th:first-child { width: 3.2em; font-variant-numeric: tabular-nums; }
+td.hl { background: var(--grid); }
+@supports (background: color-mix(in srgb, red, blue)) { td.hl { background: color-mix(in srgb, var(--s3) 10%, transparent); } }
+.pill { display: inline-block; margin-left: 6px; font-size: .68rem; font-weight: 700; letter-spacing: .06em; padding: 2px 8px; border-radius: 999px; background: var(--s3); color: #fff; vertical-align: 1px; }
+
+footer { margin: 60px 0 40px; padding-top: 18px; border-top: 1px solid var(--border); font-size: .86rem; color: var(--ink2); }
+footer p { max-width: 52em; }
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Navegación del curso">
+  <div class="topnav-in">
+    <a class="brand" href="#">Agroclimatología</a>
+    <div class="links">
+      <a href="#como">Cómo se aprende</a>
+      <a href="#material">Material</a>
+      <a href="#proyecto">Proyecto integrador</a>
+      <a href="#plan">Plan de 16 semanas</a>
+    </div>
+    <button type="button" class="themebtn" id="themeBtn"></button>
+  </div>
+</nav>
+
+<div class="wrap">
+<header class="hero">
+  <p class="kicker">Curso de pregrado · Agronomía</p>
+  <h1>Agroclimatología</h1>
+  <p class="lead">Aprende a leer el clima de una finca y a convertirlo en decisiones de cultivo: cuánta luz llega, cuánta agua necesita la planta, cuándo sembrar y cómo protegerse de heladas, sequías y fenómenos como El Niño y La Niña.</p>
+  <p class="cta"><a class="btn-primary" href="tema-1-radiacion-solar.html">Abrir el Tema 1 →</a> <a class="btn-ghost" href="#plan">Ver el plan de 16 semanas</a></p>
+  <ul class="stats">
+    <li><strong>16</strong>semanas</li>
+    <li><strong>3</strong>módulos</li>
+    <li><strong>1</strong>proyecto integrador</li>
+    <li><strong>Datos reales</strong>de estaciones del IDEAM</li>
+  </ul>
+</header>
+
+<main>
+<section id="como">
+  <h2>Cómo se aprende aquí</h2>
+  <p class="sec-lead">Cada tema combina explicación, un laboratorio que puedes mover con tus propias manos y ejercicios que terminan en una decisión de campo.</p>
+  <div class="grid c3">
+    <div class="card"><span class="ico" aria-hidden="true">🧪</span><h3>Laboratorios interactivos</h3><p>Cambia la latitud, la fecha o la nubosidad y mira al instante qué cambia en la energía que recibe un cultivo.</p></div>
+    <div class="card"><span class="ico" aria-hidden="true">🌱</span><h3>Un proyecto que crece</h3><p>Cada grupo trabaja todo el semestre sobre un municipio real y un cultivo comercial, con datos de estaciones del IDEAM.</p></div>
+    <div class="card"><span class="ico" aria-hidden="true">🧭</span><h3>Decisiones de campo</h3><p>Regar o no, abrir o cerrar cortinas, dónde sembrar: cada ejercicio se resuelve con números y termina en una decisión.</p></div>
+  </div>
+</section>
+
+<section id="material">
+  <h2>Material interactivo</h2>
+  <p class="sec-lead">Los temas se publican uno a uno. El primero ya está disponible; los demás están en preparación.</p>
+  <div class="grid c3">
+    <div class="card topic live">
+      <span class="tag">DISPONIBLE</span>
+      <h3>Tema 1 · Radiación solar y nubosidad</h3>
+      <p>Geometría solar, radiación extraterrestre y radiación solar global, comparación entre ciudades de Colombia, escena del Sol y la Tierra, y un taller con ejemplo resuelto, ejercicios y retos con verificación.</p>
+      <a class="go" href="tema-1-radiacion-solar.html">Abrir el Tema 1 →</a>
+    </div>
+    <div class="card topic soon"><span class="tag">EN PREPARACIÓN</span><h3>Tema 2 · Balance de energía global</h3><p>Albedo, efecto invernadero y temperatura de equilibrio de la Tierra.</p></div>
+    <div class="card topic soon"><span class="tag">EN PREPARACIÓN</span><h3>Tema 3 · Balance de energía en el cultivo</h3><p>Cómo se reparte la radiación neta entre calor del suelo, calor sensible y calor latente.</p></div>
+    <div class="card topic soon"><span class="tag">EN PREPARACIÓN</span><h3>Tema 4 · Gradiente térmico y pisos térmicos</h3><p>Cómo cae la temperatura con la altitud y qué significa para los cultivos andinos.</p></div>
+    <div class="card topic soon"><span class="tag">EN PREPARACIÓN</span><h3>Tema 5 · Humedad y déficit de presión de vapor</h3><p>Punto de rocío, saturación y la zona óptima de déficit de presión de vapor para las plantas.</p></div>
+    <div class="card topic soon"><span class="tag">EN PREPARACIÓN</span><h3>Tema 6 · Tiempo térmico (grados-día)</h3><p>Cuántos días faltan para la cosecha según la temperatura acumulada.</p></div>
+    <div class="card topic soon"><span class="tag">EN PREPARACIÓN</span><h3>Tema 7 · Evapotranspiración</h3><p>Cuánta agua pierde el cultivo: el aporte de la radiación y el del viento y el aire seco.</p></div>
+    <div class="card topic soon"><span class="tag">EN PREPARACIÓN</span><h3>Estación meteorológica simulada</h3><p>Los instrumentos, cómo miden y datos climatológicos reales para descargar.</p></div>
+  </div>
+</section>
+
+<section id="proyecto">
+  <h2>Proyecto integrador</h2>
+  <p class="sec-lead">En lugar de talleres sueltos, el curso tiene un hilo conductor. Desde la primera semana cada grupo recibe un municipio (con su estación meteorológica) y un cultivo comercial, por ejemplo papa, fresa, maíz, flores bajo invernadero o uchuva. Cada cálculo de clase alimenta el entregable final: un <strong>Informe de aptitud agroclimática y gestión del riesgo</strong>.</p>
+  <div class="grid c3 cuts">
+    <div class="card cut"><h3>Caracterización climática base</h3><p>Series históricas limpias, climograma y análisis de radiación y temperatura del municipio asignado.</p></div>
+    <div class="card cut"><h3>Calendario fenológico y balance hídrico</h3><p>Fechas críticas de riego y alertas fitosanitarias para el cultivo asignado.</p></div>
+    <div class="card cut"><h3>Dictamen de zonificación y plan de manejo</h3><p>Aptitud agroclimática de la zona y plan frente a El Niño, La Niña y heladas.</p></div>
+  </div>
+</section>
+
+<section id="plan">
+  <h2>Plan de 16 semanas</h2>
+  <p class="sec-lead">Tres módulos que van de la física de la atmósfera a las decisiones de zonificación y gestión del riesgo. Es un plan en construcción: los temas y las actividades pueden ajustarse.</p>
+
+  <details class="mod" open>
+    <summary><span class="mt">Módulo 1 · Física de la atmósfera e instrumentación</span><span class="mw">Semanas 1 a 5</span></summary>
+    <div class="modbody">
+      <p><strong>Por qué importa.</strong> Un agrónomo no puede gestionar lo que no sabe medir ni interpretar. Aquí se entiende qué significan físicamente los números de una estación y se detectan errores antes de tomar decisiones. La radiación, la temperatura, la humedad y el viento son los motores físicos que determinan cuánta agua pierde el cultivo y qué tan rápido crece.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>Sem</th><th>Tema de clase</th><th>Ejercicio de clase (toma de decisiones)</th><th>Avance del proyecto</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Introducción, tiempo frente a clima y estructura atmosférica.</td><td>Analizar dos noticias agrícolas recientes y diferenciar cuáles problemas son de tiempo (táctico) y cuáles de clima (estratégico).</td><td>Asignación de grupos, municipio (estación IDEAM) y cultivo. Descarga de datos crudos.</td></tr>
+          <tr><td>2</td><td class="hl">Radiación solar, balance de energía y fotosíntesis (PAR). <a href="tema-1-radiacion-solar.html">Laboratorio: Tema 1</a><span class="pill">DISPONIBLE</span></td><td>Calcular cuánta radiación se pierde bajo una malla sombra o un plástico de invernadero viejo y decidir si requiere recambio.</td><td>Limpieza de datos faltantes y cálculo de promedios mensuales de radiación y brillo solar.</td></tr>
+          <tr><td>3</td><td>Temperatura del aire y del suelo. Inversión térmica.</td><td>Interpretar un perfil nocturno de temperatura para decidir en qué lote, de ladera o de valle, es seguro sembrar un cultivo sensible.</td><td>Gráficos de temperaturas máximas, medias y mínimas. Identificación de meses con riesgo térmico.</td></tr>
+          <tr><td>4</td><td>Humedad atmosférica (punto de rocío, déficit de presión de vapor) y viento.</td><td>Usar una tabla de déficit de presión de vapor para decidir si abrir o cerrar las cortinas de un invernadero y evitar cierre de estomas u hongos.</td><td>Humedad relativa media y análisis de rosas de vientos (necesidad de cortinas rompevientos).</td></tr>
+          <tr><td>5</td><td>Precipitación e instrumental meteorológico (visita y práctica).</td><td>Auditar el emplazamiento de una estación (o fotos de estaciones mal ubicadas) e identificar sesgos de medición.</td><td><strong>Entrega 1:</strong> caracterización climática base y climograma del municipio asignado.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details class="mod">
+    <summary><span class="mt">Módulo 2 · Relación clima, agua, planta y plaga</span><span class="mw">Semanas 6 a 11</span></summary>
+    <div class="modbody">
+      <p><strong>Por qué importa.</strong> Traduce los datos meteorológicos a lenguaje biológico y agronómico, y responde dos preguntas: ¿cuánta agua necesita el cultivo? y ¿cuándo va a florecer o a ser atacado por una plaga? Al saber cuánta agua y calor exige el cultivo en cada etapa, en el módulo siguiente se cruza esa demanda con la oferta del territorio.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>Sem</th><th>Tema de clase</th><th>Ejercicio de clase (toma de decisiones)</th><th>Avance del proyecto</th></tr></thead>
+        <tbody>
+          <tr><td>6</td><td>Evapotranspiración de referencia (ET<sub>0</sub>) y del cultivo (ET<sub>c</sub>).</td><td>Calcular la ET<sub>0</sub> en Excel por Hargreaves o Penman-Monteith para una semana calurosa y otra nublada, y ajustar la lámina de riego.</td><td>Cálculo de la ET<sub>0</sub> mensual histórica para la estación asignada.</td></tr>
+          <tr><td>7</td><td>Coeficientes de cultivo (K<sub>c</sub>) y etapas fenológicas.</td><td>Construir la curva de demanda hídrica de un cultivo desde la siembra hasta la cosecha e identificar el mes de máxima demanda.</td><td>Definición de etapas fenológicas y K<sub>c</sub> del cultivo asignado. Cálculo de la ET<sub>c</sub>.</td></tr>
+          <tr><td>8</td><td>Balance hídrico agrícola (oferta de lluvia frente a demanda ET<sub>c</sub>).</td><td>Dado un suelo franco y otro arenoso, determinar en qué década (10 días) el cultivo entra en estrés hídrico y requiere riego suplementario.</td><td>Balance hídrico climático mensual (identificación de excesos y déficits).</td></tr>
+          <tr><td>9</td><td>Tiempo térmico y grados-día de desarrollo.</td><td>Calcular la fecha probable de cosecha para dos fechas de siembra distintas usando series reales de temperatura.</td><td>Cálculo de los grados-día acumulados del cultivo en la zona para estimar la duración del ciclo.</td></tr>
+          <tr><td>10</td><td>Agrometeorología fitosanitaria (plagas y enfermedades).</td><td>Usar umbrales de temperatura y horas de mojado foliar (por ejemplo, <i>Phytophthora infestans</i> en papa) para decidir si aplicar un fungicida preventivo o ahorrar la aplicación.</td><td>Identificación de una plaga o enfermedad clave del cultivo y de sus ventanas climáticas de riesgo.</td></tr>
+          <tr><td>11</td><td>Parcial práctico y taller de integración.</td><td>Resolución de un caso de campo que integra ET<sub>c</sub>, grados-día y alerta fitosanitaria.</td><td><strong>Entrega 2:</strong> balance hídrico del cultivo y calendario fenológico y fitosanitario.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details class="mod">
+    <summary><span class="mt">Módulo 3 · Zonificación agroclimática y gestión del riesgo</span><span class="mw">Semanas 12 a 16</span></summary>
+    <div class="modbody">
+      <p><strong>Por qué importa.</strong> Eleva la visión del lote a la escala regional. Prepara para evaluar proyectos productivos, ordenar el territorio y proteger los cultivos frente a anomalías climáticas. Es la síntesis que piden entidades como UPRA, AGROSAVIA, aseguradoras agrícolas y empresas de consultoría.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>Sem</th><th>Tema de clase</th><th>Ejercicio de clase (toma de decisiones)</th><th>Avance del proyecto</th></tr></thead>
+        <tbody>
+          <tr><td>12</td><td>Clasificaciones climáticas (Caldas-Lang, Holdridge, Thornthwaite).</td><td>Clasificar dos municipios cercanos con distinta altitud y explicar por qué cambian los sistemas productivos predominantes.</td><td>Clasificación climática formal del municipio de estudio.</td></tr>
+          <tr><td>13</td><td>Zonificación agroclimática (aptitud física y climática).</td><td>Cruzar los requerimientos climáticos óptimos de un cultivo (tablas UPRA y FAO) con la oferta climática local para calificar la aptitud (alta, media, baja, no apta).</td><td>Matriz de aptitud agroclimática del cultivo en el municipio, con sus limitantes.</td></tr>
+          <tr><td>14</td><td>Variabilidad climática: fenómeno ENSO (El Niño y La Niña).</td><td>Analizar cómo cambian las lluvias y las temperaturas de su región en un año Niño frente a un año Niña y proponer ajustes (cambio de variedad o de fecha de siembra).</td><td>Escenario de impacto ENSO sobre el balance hídrico y la fenología del cultivo.</td></tr>
+          <tr><td>15</td><td>Eventos extremos: heladas de radiación, sequías y golpes de calor.</td><td>Evaluar el costo y el beneficio de métodos de control de heladas (riego por aspersión, calentadores, coberturas) ante un pronóstico de cielo despejado y viento calmo.</td><td>Plan de contingencia y adaptación frente al principal evento extremo de la zona.</td></tr>
+          <tr><td>16</td><td>Sustentaciones finales.</td><td>Defensa técnica ante el grupo, simulando una junta directiva o un comité técnico de agricultores.</td><td><strong>Entrega final:</strong> dictamen completo de zonificación y plan de gestión agroclimática.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+</section>
+</main>
+
+<footer>
+  <p>Material de apoyo para un curso de Agroclimatología, en construcción. Los contenidos, los temas y las actividades pueden cambiar. Las ecuaciones del Tema 1 siguen la guía FAO-56 (Allen et al., 1998).</p>
+</footer>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement, btn = document.getElementById('themeBtn');
+  function eff() { return root.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); }
+  function paint() { btn.textContent = eff() === 'dark' ? '☀ Modo claro' : '☾ Modo oscuro'; }
+  try { var s = localStorage.getItem('tema-curso'); if (s === 'light' || s === 'dark') root.setAttribute('data-theme', s); } catch (e) {}
+  paint();
+  btn.addEventListener('click', function () {
+    var n = eff() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', n);
+    try { localStorage.setItem('tema-curso', n); } catch (e) {}
+    paint();
+  });
+  var links = document.querySelectorAll('.links a'), map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      links.forEach(function (a) { a.removeAttribute('aria-current'); });
+      var a = map[e.target.id]; if (a) a.setAttribute('aria-current', 'true');
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+})();
+</script>
+</body>
+</html>
